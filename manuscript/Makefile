@@ -21,4 +21,4 @@ $(TARGETS):
 
 clean:
 	latexmk -CA
-	rm -rf *.bbl
+	rm -f *.bbl
