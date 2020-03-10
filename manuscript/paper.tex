@@ -109,18 +109,22 @@
 %\newtheorem{defn}[thm]{Definition}
 
 
-\title{Multiple Roots}
+\title{Asymptotic Hyperplane Consensus}
 
-\date{}
+\author{Matthias F\"ugger\textsuperscript{1} \and Emmanuel Godard\textsuperscript{2} \and Damien Imbs\textsuperscript{2} \and Thomas Nowak\textsuperscript{3} \and Eloi Perdereau\textsuperscript{2}}
+
+\date{\textsuperscript{1}CNRS, LSV, ENS Paris-Saclay, Universit\'e Paris-Saclay \& Inria\\\textsuperscript{2} Aix Marseille University, CNRS, LIF\\\textsuperscript{3} Universit\'e Paris-Saclay, CNRS}
 
 
 \begin{document}
 
 \maketitle
 
-%\begin{abstract}
-%We \dots
-%\end{abstract}
+\begin{abstract}
+We introduce the problem of asymptotic hyperplane consensus, which requires processes' outputs to converge onto a common hyperplane while remaining inside the convex hull of initial vectors.
+This is a relaxation of asymptotic consensus in which outputs have to converge to a single point, i.e., a $0$-dimensional affine subspace.
+We show that a large class of algorithms used for asymptotic consensus gracefully degrade to solve asymptotic hyperplane consensus in weaker networks models.
+\end{abstract}
 
 
 \section{Introduction}
@@ -128,8 +132,13 @@
 We show that the problem of asymptotic consensus to hyperplanes of dimension $d$ in network models where
 each graph has at most $d$ roots is solvable and give bounds on the convergence rate.
 
+The rest of the paper is structured as follows.
+We introduce the model and the problem in Sections~\ref{sec:model} and~\ref{sec:problem}, respectively.
+Section~\ref{sec:algos} describes the class of algorithms that allow to solve asymptotic hyperplane consensus, namely averaging algorithms.
+In Section~\ref{sec:analysis} we prove our main result, i.e., that any $\alpha$-secure averaging algorithm solves asymptotic hyperplane consensus with $d$-dimensional vectors in $d$-broadcastable network models.
+We give conclusions and perspectives for future work in Section~\ref{sec:conclusion}.
 
-\section{Model}
+\section{Model}\label{sec:model}
 
 At every round $t\in\IN_0$ every process $i\in[n]$ has a value
   $x_i(t) \in \IR^d$, which evolves according to an $\alpha$-secure averaging algorithm.
@@ -146,7 +155,11 @@ In an $\alpha$-secure averaging algorithm, with $\alpha \in (0,1]$,
 We call a set $M\subseteq [n]$ a {\em root set\/} of communication graph $G = ([n],E)$
 if for every $i\in[n]$ there exists some $k\in M$ such that $(k,i)\in E$.
 
-\section{Analysis}
+\section{Problem}\label{sec:problem}
+
+\section{Averaging Algorithms}\label{sec:algos}
+
+\section{Analysis}\label{sec:analysis}
 
 We start with some basic notation.
 Denote by~$X(t)$ the set of points
@@ -532,6 +545,8 @@ We thus conclude
 which proves~\eqref{eq:contract:in:halfspace}
 and thus the theorem.
 \end{proof}
+
+\section{Conclusion}\label{sec:conclusion}
 
 
 \bibliography{agents}
