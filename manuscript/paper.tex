@@ -199,12 +199,12 @@ Let $m \geq n^{k+1}$ and let $G_1,\dots,G_m$ be $k$-rooted.
 By the pigeonhole principle, there exists a subsequence $G_1',\dots,G_\ell'$ of at least
 $\ell \geq n^{k+1}/\binom{n}{k}\geq n^{k+1}/n^k = n$ communication graphs in which~$M$ is a root set.
 By considering the influence sets
-\begin{equation}
-S_i(t) = \big\{ j\in[n] \mid (i,j) \in E(G_1'\circ \cdots \circ G_t') \big\}
-\end{equation}
-for every $i\in M$, it is easy to see that at least one of the~$S_i(t)$
-strictly grows until their union covers the set~$[n]$ of all processes.
-Thus, since $\ell \geq n-k$, the union of the~$S_i(\ell)$ covers~$[n]$.
+\begin{align*}
+S_i(t) &= \big\{ j\in[n] \mid (i,j) \in E(G_1'\circ \cdots \circ G_t') \big\} \text{ for every $i\in M$ and}\\
+S(t)   &= \bigcup_{i \in [n]} S_i(t)\enspace,
+\end{align*}
+it is easy to see that $S(t)$ strictly grows until it covers the set~$[n]$ of all processes.
+Thus, since $|S(0)| = k$ and $\ell \geq n-k$, influence set $S(\ell)$ covers~$[n]$.
 In particular this means that~$M$ is a broadcasting set in the product graph $G = G_1\circ\cdots\circ G_m$.
 \end{proof}
 
