@@ -213,6 +213,30 @@ vector $x_i(t) \in \IR^d$ in every round $t\in\IN$ such that in every execution 
 \emph{(Validity)}
 \end{itemize}
 
+\begin{thm}\label{lem:imposs}
+The $d$-dimensional hyperplane consensus problem is unsolvable in networks
+models that are not $d$-rooted.
+\end{thm}
+\begin{proof}
+If a network model is not $d$-rooted, then it contains a communication
+graph~$G$ that is not $d$-rooted.
+But then~$G$ contains a set~$M$ of $d+1$ processes in which no process is
+reachable from any other in~$G$.
+Without loss of generality, by permuting the process namees, assume that $M =
+\{1,\dots,d+1\}$.
+For every $i\in M$, let~$A_i$ be the set of processes that reach~$i$ in~$G$.
+By choice of~$M$, the sets~$A_i$ are pairwise disjoint and $i\in S_i$.
+Then, for every $j\in A_i$, choose the initial vectors $x_j(0) = e_i$ if $1\leq i \leq d$ where~$e_i$
+is the $i$\textsuperscript{th} standard basis vector, and $x_j(0) = 0$ if $i = d+1$.
+By Validity, for every $i\in M$, since the convex hull of initial values
+in~$A_i$ is a singleton and~$i$ does not hear from any process outside
+of~$A_i$, no cluster point of the sequence $\big(x_i(t)\big)_t$ can be
+different from~$x_i(0)$.
+But the initial values, and thus the cluster points, of processes in~$M$ do not
+belong to a common hyperplane in~$\IR^d$.
+This is contradiction to Hyperplane Agreement.
+\end{proof}
+
 
 \section{Averaging Algorithms}\label{sec:algos}
 
