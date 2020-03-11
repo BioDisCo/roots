@@ -132,6 +132,10 @@ We show that a large class of algorithms used for asymptotic consensus gracefull
 We show that the problem of asymptotic consensus to hyperplanes of dimension $d \in \IN$ in network models where
 each graph has at most $d$ roots is solvable and give bounds on the convergence rate.
 
+Asymptotic consensus \cite{CBFN15:icalp}
+
+Multidimensional asymptotic consensus \cite{FN18:disc}
+
 
 \paragraph{Organization.} The rest of the paper is structured as follows.
 We introduce the model and the problem in Sections~\ref{sec:model} and~\ref{sec:problem}, respectively.
@@ -143,6 +147,10 @@ We give conclusions and perspectives for future work in Section~\ref{sec:conclus
 
 We write $\IN = \{1,2,\dots\}$ and $\IN_0 = \IN \cup \{0\}$.
 Further, $[n] = \{1,\dots, n\}$.
+For directed graphs $G_1 = ([n],E_1)$ and $G_2 = ([n],E_2)$, we write
+  $G_1 \circ G_2$ for the product graph $G = ([n], E)$ with $(i,j) \in E$
+  if and only if there exists a $u \in [n]$ such that $(i,u) \in E_1$ and
+  $(u,j) \in E_2$.
 
 We assume a synchronous message-passing network with dynamic communication
 links, akin to message adversaries~\cite{afek13:asynchrony} or the Heard-Of
@@ -163,7 +171,7 @@ An algorithm \emph{solves a problem} in~$\N$ if it satisifies its specification
 in all executions in which all communication graphs are chosen from~$\N$.
 
 A communication graph~$G$ is \emph{$k$-rooted} if there exists a set
-$M\subseteq[n]$ of at most~$k$ processes such that every other process in~$[n]$
+$M\subseteq[n]$ of at most~$k$ processes such that every process in~$[n]$
 is reachable from~$M$ in~$G$.
 In this case, we call~$M$ a \emph{root set} of~$G$.
 A network model is $k$-rooted if all its communication graphs are.
@@ -172,7 +180,7 @@ i.e., $1$-dimensional asymptotic hyperplane consensus, is
 solvable in a network model if and only if it is $1$-rooted.
 
 A communication graph~$G$ is \emph{$k$-broadcastable} if there exists a set
-$M\subseteq[n]$ of at most~$k$ processes such that every other process in~$[n]$
+$M\subseteq[n]$ of at most~$k$ processes such that every process in~$[n]$
 has an incoming edge from a process in~$M$ in~$G$.
 In this case, we call~$M$ a \emph{broadcasting set} of~$G$.
 Every $k$-broadcastable communication graph is $k$-rooted, but the converse is
@@ -181,7 +189,6 @@ A network model is $k$-broadcastable if all its communication graphs are.
 
 
 
-%TODO: define graph product
 
 \begin{lem}\label{lem:rooted:to:broadcastable}
 Any product of at least~$n^{k+1}$ communication graphs that are $k$-rooted is
@@ -198,7 +205,7 @@ S_i(t) = \big\{ j\in[n] \mid (i,j) \in E(G_1'\circ \cdots \circ G_t') \big\}
 for every $i\in M$, it is easy to see that at least one of the~$S_i(t)$
 strictly grows until their union covers the set~$[n]$ of all processes.
 Thus, since $\ell \geq n-k$, the union of the~$S_i(\ell)$ covers~$[n]$.
-In particular this means that~$M$ is a broadcasting set in the product graph $G = G_1\circ\cdots G_m$.
+In particular this means that~$M$ is a broadcasting set in the product graph $G = G_1\circ\cdots\circ G_m$.
 \end{proof}
 
 \section{Problem}\label{sec:problem}
