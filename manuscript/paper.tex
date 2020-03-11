@@ -144,7 +144,7 @@ We give conclusions and perspectives for future work in Section~\ref{sec:conclus
 We assume a synchronous message-passing network with dynamic communication
 links, akin to message adversaries~\cite{afek13:asynchrony} or the Heard-Of
 model~\cite{charron09:HO}.
-That is, every process $i\in[n]$ sends a message in every round $t\in\IN_0$,
+That is, every process $i\in[n]$ sends a message in every round $t\in\IN$,
 then receives the messages from all incoming neighbors in the (directed)
 round-$t$ communication graph $G_t=([n],E_t)$, and updates its local state as a function
 of its previous state and the received messages.
@@ -191,11 +191,21 @@ S_i(t) = \big\{ j\in[n] \mid (i,j) \in E(G_1'\circ \cdots \circ G_t') \big\}
 \end{equation}
 for every $i\in M$, it is easy to see that at least one of the~$S_i(t)$
 strictly grows until their union covers the set~$[n]$ of all processes.
-Since $\ell \geq n-k$, the union of the~$S_i(\ell)$ covers~$[n]$.
+Thus, since $\ell \geq n-k$, the union of the~$S_i(\ell)$ covers~$[n]$.
 In particular this means that~$M$ is a broadcasting set in the product graph $G = G_1\circ\cdots G_m$.
 \end{proof}
 
 \section{Problem}\label{sec:problem}
+
+In the \emph{$d$-dimensional asymptotic hyperplane consensus problem} every
+process~$i$ starts with an initial vector $x_i(0) \in \IR^d$ and outputs a
+vector $x_i(t) \in \IR^d$ in every round $t\in\IN$ such that:
+\begin{itemize}
+\item There exists an affine hyperplane $H\subseteq \IR^d$ such that all cluster points of all sequences $\big(x_i(t)\big)_t$ are in~$H$.
+\emph{(Hyperplane Agreement)}
+\item All cluster points of all sequences $\big(x_i(t)\big)_t$ are in the convex hull of the set of initial vectors.
+\emph{(Validity)}
+\end{itemize}
 
 \section{Averaging Algorithms}\label{sec:algos}
 
