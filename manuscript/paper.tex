@@ -113,7 +113,7 @@
 
 \author{Matthias F\"ugger\textsuperscript{1} \and Emmanuel Godard\textsuperscript{2} \and Damien Imbs\textsuperscript{2} \and Thomas Nowak\textsuperscript{3} \and Eloi Perdereau\textsuperscript{2}}
 
-\date{\textsuperscript{1}CNRS, LSV, ENS Paris-Saclay, Universit\'e Paris-Saclay \& Inria\\\textsuperscript{2} Aix Marseille University, CNRS, LIF\\\textsuperscript{3} Universit\'e Paris-Saclay, CNRS}
+\date{\textsuperscript{1} CNRS, LSV, ENS Paris-Saclay, Universit\'e Paris-Saclay \& Inria\\\textsuperscript{2} Aix Marseille University, CNRS, LIF\\\textsuperscript{3} Universit\'e Paris-Saclay, CNRS}
 
 
 \begin{document}
@@ -144,8 +144,21 @@ We give conclusions and perspectives for future work in Section~\ref{sec:conclus
 We assume a synchronous message-passing network with dynamic communication
 links, akin to message adversaries~\cite{TODO} or the Heard-Of
 model~\cite{TODO}.
+That is, every process $i\in[n]$ sends a message in every round $t\in\IN_0$,
+then receives the messages from all incoming neighbors in the (directed)
+round-$t$ communication graph $G_t=([n],E_t)$, and updates its local state as a function
+of its previous state and the received messages.
+The execution of a deterministic algorithm is thus uniquely determined by the
+initial states and the sequence of communication graphs.
+Although the model is formally synchronous, it has been shown to capture
+classical asynchronous~\cite{TODO} and even Byzantine~\cite{TODO} models.
 
-%TODO: these systems can model...
+We call a set $M\subseteq [n]$ a {\em root set\/} of communication graph $G = ([n],E)$
+if for every $i\in[n]$ there exists some $k\in M$ such that $(k,i)\in E$.
+
+\section{Problem}\label{sec:problem}
+
+\section{Averaging Algorithms}\label{sec:algos}
 
 At every round $t\in\IN_0$ every process $i\in[n]$ has a value
   $x_i(t) \in \IR^d$, which evolves according to an $\alpha$-secure averaging algorithm.
@@ -158,13 +171,6 @@ In an $\alpha$-secure averaging algorithm, with $\alpha \in (0,1]$,
 %$[ (1-\alpha) m_i(t) + \alpha M_i(t) ,\, (1-\alpha) m_i(t) + \alpha M_i(t) ]$ where
 %  $m_i(t)$ is the mimimum and $M_i(t)$ the maximum of the values received by $i$
 %  in round $t+1$.
-
-We call a set $M\subseteq [n]$ a {\em root set\/} of communication graph $G = ([n],E)$
-if for every $i\in[n]$ there exists some $k\in M$ such that $(k,i)\in E$.
-
-\section{Problem}\label{sec:problem}
-
-\section{Averaging Algorithms}\label{sec:algos}
 
 \section{Analysis}\label{sec:analysis}
 
