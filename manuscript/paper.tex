@@ -147,6 +147,10 @@ We give conclusions and perspectives for future work in Section~\ref{sec:conclus
 
 We write $\IN = \{1,2,\dots\}$ and $\IN_0 = \IN \cup \{0\}$.
 Further, $[n] = \{1,\dots, n\}$.
+For directed graphs $G_1 = ([n],E_1)$ and $G_2 = ([n],E_2)$, we write
+  $G_1 \circ G_2$ for the product graph $G = ([n], E)$ with $(i,j) \in E$
+  if and only if there exists a $u \in [n]$ such that $(i,u) \in E_1$ and
+  $u,j) \in E_2$.
 
 We assume a synchronous message-passing network with dynamic communication
 links, akin to message adversaries~\cite{afek13:asynchrony} or the Heard-Of
@@ -185,7 +189,6 @@ A network model is $k$-broadcastable if all its communication graphs are.
 
 
 
-%TODO: define graph product
 
 \begin{lem}\label{lem:rooted:to:broadcastable}
 Any product of at least~$n^{k+1}$ communication graphs that are $k$-rooted is
