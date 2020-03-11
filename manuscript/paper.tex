@@ -141,6 +141,9 @@ We give conclusions and perspectives for future work in Section~\ref{sec:conclus
 
 \section{Model}\label{sec:model}
 
+We write $\IN = \{1,2,\dots\}$ and $\IN_0 = \IN \cup \{0\}$.
+Further, $[n] = \{1,\dots, n\}$.
+
 We assume a synchronous message-passing network with dynamic communication
 links, akin to message adversaries~\cite{afek13:asynchrony} or the Heard-Of
 model~\cite{charron09:HO}.
@@ -164,7 +167,7 @@ $M\subseteq[n]$ of at most~$k$ processes such that every other process in~$[n]$
 is reachable from~$M$ in~$G$.
 In this case, we call~$M$ a \emph{root set} in~$G$.
 A network model is $k$-rooted if all its communication graphs are.
-Charron-Bost et al.~\cite{TODO} have shown that asymptotic consensus is
+Charron-Bost et al.~\cite{CBFN15:icalp} have shown that asymptotic consensus is
 solvable in a network model if and only if it is $1$-rooted.
 
 A communication graph~$G$ is \emph{$k$-broadcastable} if there exists a set
