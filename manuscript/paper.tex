@@ -171,7 +171,8 @@ $M\subseteq[n]$ of at most~$k$ processes such that every process in~$[n]$
 is reachable from~$M$ in~$G$.
 In this case, we call~$M$ a \emph{root set} of~$G$.
 A network model is $k$-rooted if all its communication graphs are.
-Charron-Bost et al.~\cite{CBFN15:icalp} have shown that asymptotic consensus is
+Charron-Bost et al.~\cite{CBFN15:icalp} have shown that asymptotic consensus,
+i.e., $1$-dimensional asymptotic hyperplane consensus, is
 solvable in a network model if and only if it is $1$-rooted.
 
 A communication graph~$G$ is \emph{$k$-broadcastable} if there exists a set
@@ -215,6 +216,7 @@ vector $x_i(t) \in \IR^d$ in every round $t\in\IN$ such that in every execution 
 \item All cluster points of all sequences $\big(x_i(t)\big)_t$ are in the convex hull of the set of initial vectors.
 \emph{(Validity)}
 \end{itemize}
+
 
 \section{Averaging Algorithms}\label{sec:algos}
 
