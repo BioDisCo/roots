@@ -148,13 +148,51 @@ That is, every process $i\in[n]$ sends a message in every round $t\in\IN_0$,
 then receives the messages from all incoming neighbors in the (directed)
 round-$t$ communication graph $G_t=([n],E_t)$, and updates its local state as a function
 of its previous state and the received messages.
+Every process receives its own message, i.e., $(i,i)\in G_t$ for all $i\in[n]$.
 The execution of a deterministic algorithm is thus uniquely determined by the
 initial states and the sequence of communication graphs.
 Although the model is formally synchronous, it has been shown to capture
 classical asynchronous~\cite{TODO} and even Byzantine~\cite{TODO} models.
 
-We call a set $M\subseteq [n]$ a {\em root set\/} of communication graph $G = ([n],E)$
-if for every $i\in[n]$ there exists some $k\in M$ such that $(k,i)\in E$.
+A \emph{network model}~$\N$ is a set of communication graphs.
+An algorithm \emph{solves a problem} in~$\N$ if it satisifies its specification
+in all executions in which all communication graphs are chosen from~$\N$.
+
+A communication graph~$G$ is \emph{$k$-rooted} if there exists a set
+$M\subseteq[n]$ of at most~$k$ processes such that every other process in~$[n]$
+is reachable from~$M$ in~$G$.
+In this case, we call~$M$ a \emph{root set} in~$G$.
+A network model is $k$-rooted if all its communication graphs are.
+Charron-Bost et al.~\cite{TODO} have shown that asymptotic consensus is
+solvable in a network model if and only if it is $1$-rooted.
+
+A communication graph~$G$ is \emph{$k$-broadcastable} if there exists a set
+$M\subseteq[n]$ of at most~$k$ processes such that every other process in~$[n]$
+has an incoming edge from a process in~$M$ in~$G$.
+In this case, we call~$M$ a \emph{broadcasting set} in~$G$.
+Every $k$-broadcastable communication graph is $k$-rooted, but the converse is
+not true.
+A network model is $k$-broadcastable if all its communication graphs are.
+
+%TODO: define graph product
+
+\begin{lem}\label{lem:rooted:to:broadcastable}
+Any product of at least~$n^{k+1}$ communication graphs that are $k$-rooted is
+$k$-broadcastable.
+\end{lem}
+\begin{proof}
+Let $m \geq n^{k+1}$ and let $G_1,\dots,G_m$ be $k$-rooted.
+By the pigeonhole principle, there exists a subsequence $G_1',\dots,G_\ell'$ of at least
+$\ell \geq n^{k+1}/\binom{n}{k}\leq n^{k+1}/n^k = n$ communication graphs in which~$M$ is a root set.
+By considering the influence sets
+\begin{equation}
+S_i(t) = \big\{ j\in[n] \mid (i,j) \in E(G_1'\circ \cdots \circ G_t') \big\}
+\end{equation}
+for every $i\in M$, it is easy to see that at least one of the~$S_i(t)$
+strictly grows until their union covers the set~$[n]$ of all processes.
+Since $\ell \geq n-k$, the union of the~$S_i(\ell)$ covers~$[n]$.
+In particular this means that~$M$ is a broadcasting set in the product graph $G = G_1\circ\cdots G_m$.
+\end{proof}
 
 \section{Problem}\label{sec:problem}
 
