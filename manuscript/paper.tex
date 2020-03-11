@@ -227,9 +227,9 @@ models that are not $d$-rooted.
 \begin{proof}
 If a network model is not $d$-rooted, then it contains a communication
 graph~$G$ that is not $d$-rooted.
-But then~$G$ contains a set~$M$ of $d+1$ processes in which no process is
-reachable from any other in~$G$.
-Without loss of generality, by permuting the process namees, assume that $M =
+But then~$G$ contains at least $d+1$ strongly connected components without incoming edges.
+Let~$M$ be a set of $d+1$ processes from different such components.
+Without loss of generality, by permuting the process names, assume that $M =
 \{1,\dots,d+1\}$.
 For every $i\in M$, let~$A_i$ be the set of processes that reach~$i$ in~$G$.
 By choice of~$M$, the sets~$A_i$ are pairwise disjoint and $i\in A_i$.
