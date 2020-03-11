@@ -142,8 +142,8 @@ We give conclusions and perspectives for future work in Section~\ref{sec:conclus
 \section{Model}\label{sec:model}
 
 We assume a synchronous message-passing network with dynamic communication
-links, akin to message adversaries~\cite{TODO} or the Heard-Of
-model~\cite{TODO}.
+links, akin to message adversaries~\cite{afek13:asynchrony} or the Heard-Of
+model~\cite{charron09:HO}.
 That is, every process $i\in[n]$ sends a message in every round $t\in\IN_0$,
 then receives the messages from all incoming neighbors in the (directed)
 round-$t$ communication graph $G_t=([n],E_t)$, and updates its local state as a function
@@ -152,7 +152,8 @@ Every process receives its own message, i.e., $(i,i)\in G_t$ for all $i\in[n]$.
 The execution of a deterministic algorithm is thus uniquely determined by the
 initial states and the sequence of communication graphs.
 Although the model is formally synchronous, it has been shown to capture
-classical asynchronous~\cite{TODO} and even Byzantine~\cite{TODO} models.
+classical round-based asynchronous~\cite{charron09:HO} and even
+Byzantine~\cite{biely07:tolerating,mendes15:multidimensional} models.
 
 A \emph{network model}~$\N$ is a set of communication graphs.
 An algorithm \emph{solves a problem} in~$\N$ if it satisifies its specification
