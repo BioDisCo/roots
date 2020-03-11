@@ -292,7 +292,7 @@ algorithm, which assigns the same weight to all received vectors.
 \STATE 
 $\displaystyle x_i \gets \sum_{j\in \In_i(t)} a_{ij} x_j$
 \end{algorithmic}
-\caption{Averaging algorithm for agent $i$}
+\caption{Averaging algorithm for process $i$}
 \label{alg:averaging}
 \end{algorithm}
 
@@ -376,7 +376,7 @@ The next lemma shows that the distance of the points to $H$ even increases:
   the distance between roots and $H$.
 
 \begin{lem}\label{lem:halfspace:zone}
-Let $M$ be a root set of the communication graph $G(t)=([n],E(t))$ at time $t \ge 1$.
+Let $M$ be a broadcasting set of the communication graph $G(t)=([n],E(t))$ at time $t \ge 1$.
 Let $R = \{ x_i(t-1) \mid i\in M\}$ be the set of points of~$M$ at time $t-1$.
 Further, let $H \subseteq \IR^d$ be an open half-space such that $X(t-1) \cap H = \emptyset$.
 Then $\dist(X(t), H) \geq \alpha \dist(R, H)$.
@@ -599,7 +599,7 @@ We can now show contraction of the volume of $\poly(X(t))$.
 \begin{thm}\label{thm:contract}
 %Assume that $\vol_d(\poly(X(t))) > 0$. 
 %Further assume that 
-If the communication graph $G(t)$ has a root set~$M$ with $\lvert M\rvert \leq d$,
+If the communication graph $G(t)$ has a broadcasting set~$M$ with $\lvert M\rvert \leq d$,
 then
 \begin{equation}
 \frac{\vol_d(\poly(X(t)))}{\vol_d(\poly(X(t-1)))} \leq 1-\alpha^d
@@ -609,7 +609,7 @@ then
 \begin{proof}
 For brevity, set $P = \poly(X(t-1))$ and $P' = \poly(X(t))$.
 
-Let $A\subseteq \IR^d$ be a hyperplane that contains all values of agents of the root set~$M$.
+Let $A\subseteq \IR^d$ be a hyperplane that contains all values of processes of the broadcasting set~$M$.
 Such a hyperplane exists because $\lvert M\rvert - 1 \leq d - 1$.
 Without loss of generality, by rotating and translating the coordinate system accordingly,
 we assume that $A = \{z\in\IR^d \mid z_1 = 0\}$.
