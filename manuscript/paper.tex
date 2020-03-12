@@ -716,7 +716,7 @@ and thus the theorem.
 \subsection{Proof of Theorem~\ref{thm:poss}}
 
 By Lemma~\ref{lem:contract}, we have $\vol(P(t)) \to 0$ as $t\to\infty$.
-Since the sets~$P(t)$ are nonincreasing for any averaging algorithm, this equivalent to the limit set $P^* = \lim_{t\to\infty} P(t) = \bigcap_{t\geq 0} P(t)$ being contained in some affine hyperplane $E\subseteq \IR^d$.
+Since the sets~$P(t)$ are nonincreasing for any averaging algorithm, this equivalent to the limit set $P^* = \lim_{t\to\infty} P(t) = \bigcap_{t\geq 0} P(t)$, which is convex, being contained in some affine hyperplane $E\subseteq \IR^d$.
 Since $P^* \subseteq P(0)$, it suffices to show $\dist(x_p(t),P^*) \to 0$ for all processes $p\in[n]$ to show both Hyperplane Agreement and Validity.
 
 Suppose by way of contradiction that $\dist(x_p(t),P^*) \not\to 0$ for some process~$p$.
