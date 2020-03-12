@@ -719,20 +719,7 @@ By Lemma~\ref{lem:contract}, we have $\vol(P(t)) \to 0$ as $t\to\infty$.
 Since the sets~$P(t)$ are nonincreasing for any averaging algorithm, this equivalent to the limit set $P^* = \lim_{t\to\infty} P(t) = \bigcap_{t\geq 0} P(t)$, which is convex, being contained in some affine hyperplane $E\subseteq \IR^d$.
 Since $P^* \subseteq P(0)$, it suffices to show $\dist(x_p(t),P^*) \to 0$ for all processes $p\in[n]$ to show both Hyperplane Agreement and Validity.
 
-Suppose by way of contradiction that $\dist(x_p(t),P^*) \not\to 0$ for some process~$p$.
-Then there exists some $\varepsilon > 0$ such that $\dist(x_p(t),P^*) \geq \varepsilon$ for infinitely many rounds~$t$.
-But then
-\begin{equation}
-\vol(P(t))
-\geq
-\vol(\poly(\{x(t)\} \cup P^*))
-\geq
-\varepsilon \vol_E(P^*) / d
->
-0
-\end{equation}
-for infinitely many~$t$ where $\vol_E(P^*)$ denotes the $(d-1)$-dimensional volume of~$P^*$ as a subset of the hyperplane~$E$.
-This is a contradiction to $\vol(P(t)) \to 0$.
+%TODO
 
 The bound on the volume of~$P(t)$ follows by repeated application of the bound in Lemma~\ref{lem:contract}.
 
@@ -744,4 +731,3 @@ The bound on the volume of~$P(t)$ follows by repeated application of the bound i
 
 
 \end{document}
-
