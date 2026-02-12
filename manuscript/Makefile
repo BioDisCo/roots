@@ -1,4 +1,4 @@
-TARGETS=paper.pdf
+TARGETS=main.pdf
 # You want latexmk to *always* run, because make does not have all the info.
 # Also, include non-file targets in .PHONY so they are run regardless of any
 # file of the given name existing.
@@ -21,4 +21,4 @@ $(TARGETS):
 
 clean:
 	latexmk -CA
-	rm -f *.bbl
+	rm -f *.bbl *.aux *.axp *.vtc
