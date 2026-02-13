@@ -245,6 +245,7 @@ Again, we show that this holds in the general case.
 
 We conclude in Section~\ref{sec:conclusion}.
 
+Results marked with \leanproof{} have been formally verified in the Lean~4 proof assistant using the Mathlib library; clicking the badge links to the corresponding Lean source code.
 
 \begin{figure}[hpt]
     \centering
@@ -393,7 +394,7 @@ We first show a lower bound on the attainable dimensionality reduction in asympt
 The proof is a generalization of the impossibility of asymptotic consensus in non-rooted oblivious message adversaries \cite{CBFN15:icalp}.
 It does not rely on the dynamics of the communication network and requires a single static communication graph only, where a sufficiently large number of processes are isolated and remain on their initial values.
 
-\begin{theoremrep}\label{lem:imposs}
+\begin{theoremrep}[\leanproof{https://github.com/you/repo/Diamond.lean}]\label{lem:imposs}
 For $d > s \geq 0$, the $d$-to-$s$-dimensional asymptotic subspace consensus problem is unsolvable in oblivious message adversaries that are not $(s+1)$-rooted.
 \end{theoremrep}
 \begin{proof}

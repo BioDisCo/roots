@@ -12,20 +12,86 @@ open PaperFormalization
 
 section
 
-variable {V : Type*} [AddCommGroup V] [Module ℝ V]
+variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
 variable {n : Nat}
 
-/-- Uniqueness of exact eventual limits. -/
-theorem convergesExactly_unique_aux
+/-- Uniqueness of asymptotic limits in normed spaces. -/
+theorem convergesTo_unique_aux
     {V' : Type*} {x : Round → V'} {l₁ l₂ : V'}
-    (h₁ : ConvergesExactly x l₁) (h₂ : ConvergesExactly x l₂) :
+    [NormedAddCommGroup V']
+    (h₁ : ConvergesTo x l₁) (h₂ : ConvergesTo x l₂) :
     l₁ = l₂ := by
-  rcases h₁ with ⟨T₁, hT₁⟩
-  rcases h₂ with ⟨T₂, hT₂⟩
+  by_contra hne
+  have hdist_pos : 0 < ‖l₁ - l₂‖ := by
+    exact norm_pos_iff.mpr (sub_ne_zero.mpr hne)
+  let ε : ℝ := ‖l₁ - l₂‖ / 2
+  have hε_pos : 0 < ε := by
+    dsimp [ε]
+    linarith
+  rcases h₁ ε hε_pos with ⟨T₁, hT₁⟩
+  rcases h₂ ε hε_pos with ⟨T₂, hT₂⟩
   let T := max T₁ T₂
-  have hl₁ : x T = l₁ := hT₁ T (le_max_left _ _)
-  have hl₂ : x T = l₂ := hT₂ T (le_max_right _ _)
-  exact hl₁.symm.trans hl₂
+  have h1 : ‖x T - l₁‖ < ε := hT₁ T (le_max_left _ _)
+  have h2 : ‖x T - l₂‖ < ε := hT₂ T (le_max_right _ _)
+  have htri : ‖l₁ - l₂‖ ≤ ‖x T - l₁‖ + ‖x T - l₂‖ := by
+    calc
+      ‖l₁ - l₂‖ = ‖(l₁ - x T) + (x T - l₂)‖ := by abel_nf
+      _ ≤ ‖l₁ - x T‖ + ‖x T - l₂‖ := norm_add_le _ _
+      _ = ‖x T - l₁‖ + ‖x T - l₂‖ := by simp [norm_sub_rev]
+  have hlt : ‖x T - l₁‖ + ‖x T - l₂‖ < ‖l₁ - l₂‖ := by
+    have hsum : ‖x T - l₁‖ + ‖x T - l₂‖ < ε + ε := add_lt_add h1 h2
+    have hε : ε + ε = ‖l₁ - l₂‖ := by
+      dsimp [ε]
+      ring_nf
+    simpa [hε] using hsum
+  exact (not_lt_of_ge htri) hlt
+
+theorem convergesTo_const {V' : Type*} [NormedAddCommGroup V'] (c : V') :
+    ConvergesTo (fun _ : Round => c) c := by
+  intro ε hε
+  refine ⟨0, ?_⟩
+  intro t ht
+  simpa using hε
+
+theorem convergesToSet_singleton_iff
+    {V' : Type*} [NormedAddCommGroup V'] {x : Round → V'} {a : V'} :
+    ConvergesToSet x ({a} : Set V') ↔ ConvergesTo x a := by
+  constructor
+  · intro h ε hε
+    rcases h.2 ε hε with ⟨T, hT⟩
+    refine ⟨T, ?_⟩
+    intro t ht
+    simpa [ConvergesToSet, Metric.infDist_singleton, dist_eq_norm] using hT t ht
+  · intro h
+    refine ⟨Set.singleton_nonempty a, ?_⟩
+    intro ε hε
+    rcases h ε hε with ⟨T, hT⟩
+    refine ⟨T, ?_⟩
+    intro t ht
+    simpa [ConvergesToSet, Metric.infDist_singleton, dist_eq_norm] using hT t ht
+
+theorem mem_closure_of_convergesTo_and_convergesToSet
+    {V' : Type*} [NormedAddCommGroup V']
+    {x : Round → V'} {a : V'} {S : Set V'}
+    (hTo : ConvergesTo x a)
+    (hToSet : ConvergesToSet x S) :
+    a ∈ closure S := by
+  rw [Metric.mem_closure_iff]
+  intro ε hε
+  have hε2 : 0 < ε / 2 := by linarith
+  rcases hTo (ε / 2) hε2 with ⟨T₁, hT₁⟩
+  rcases hToSet.2 (ε / 2) hε2 with ⟨T₂, hT₂⟩
+  let T := max T₁ T₂
+  have hx : dist (x T) a < ε / 2 := by
+    simpa [dist_eq_norm] using hT₁ T (le_max_left _ _)
+  have hdistS : Metric.infDist (x T) S < ε / 2 := hT₂ T (le_max_right _ _)
+  rcases (Metric.infDist_lt_iff hToSet.1).1 hdistS with ⟨y, hyS, hxy⟩
+  refine ⟨y, hyS, ?_⟩
+  calc
+    dist a y ≤ dist a (x T) + dist (x T) y := dist_triangle _ _ _
+    _ = dist (x T) a + dist (x T) y := by rw [dist_comm a (x T)]
+    _ < ε / 2 + ε / 2 := add_lt_add hx hxy
+    _ = ε := by ring
 
 abbrev Values (E : AveragingExecution (V := V) n) (t : Round) : Set V :=
   Set.range (E.outputs t)
@@ -600,7 +666,7 @@ def RealizableWitnessBy (A : DeterministicAlgorithm V n)
   ∃ Gseq : Round → CommGraph n,
     AdmissibleTrace N Gseq ∧
     (∀ i : Proc n,
-      ConvergesExactly (fun t => (A.run Gseq w.init t) i) (w.limits i))
+      ConvergesTo (fun t => (A.run Gseq w.init t) i) (w.limits i))
 
 /-- Static graph/roots data used by the lower-bound execution construction. -/
 structure StaticImpossibilityData where
@@ -684,7 +750,7 @@ theorem exists_staticImpossibilityData_of_badGraph
 
 /--
 Pinning property for a fixed static lower-bound construction:
-for any solving algorithm, any exact limit profile on the static trace from `init`
+for any solving algorithm, any limit profile on the static trace from `init`
 must match initials on the distinguished root set.
 -/
 def RootPinningOnStaticData (d : StaticImpossibilityData N s) : Prop :=
@@ -692,7 +758,7 @@ def RootPinningOnStaticData (d : StaticImpossibilityData N s) : Prop :=
     SolvesAsymptoticSubspace A N s →
     ∀ (init limits : Proc n → V),
       (∀ i : Proc n,
-        ConvergesExactly (fun t => (A.run (staticTrace (n := n) d.graph) init t) i) (limits i)) →
+        ConvergesTo (fun t => (A.run (staticTrace (n := n) d.graph) init t) i) (limits i)) →
       ∀ i : Proc n, i ∈ d.roots → limits i = init i
 
 /-- Initial values are constant on every reacheability cone of each distinguished root. -/
@@ -700,16 +766,6 @@ def InitConstantOnRootReachers
     (d : StaticImpossibilityData N s) (init : Proc n → V) : Prop :=
   ∀ i : Proc n, i ∈ d.roots →
     ∀ j : Proc n, Reachable d.graph j i → init j = init i
-
-/-- Solver-level causal validity specialized to one static graph. -/
-def SolverCausalValidityOnStaticData (d : StaticImpossibilityData N s) : Prop :=
-  ∀ (A : DeterministicAlgorithm V n),
-    SolvesAsymptoticSubspace A N s →
-    ∀ (init limits : Proc n → V),
-      (∀ i : Proc n,
-        ConvergesExactly (fun t => (A.run (staticTrace (n := n) d.graph) init t) i) (limits i)) →
-      ∀ i : Proc n,
-        limits i ∈ convexHull ℝ (init '' ({j : Proc n | Reachable d.graph j i} : Set (Proc n)))
 
 /--
 Concrete bridge: from full solver semantics and a realizable witness run,
@@ -722,42 +778,123 @@ theorem agreement_on_realizable_witness
     (hreal : RealizableWitnessBy (V := V) (n := n) N s A w) :
     SubspaceAgreementOn (V := V) (n := n) s w.roots w.limits := by
   rcases hreal with ⟨Gseq, hAdm, hConvW⟩
-  rcases hA Gseq w.init hAdm with ⟨limitsA, hConvA, hValA, hAgrA, hCausal⟩
+  rcases hA Gseq w.init hAdm with ⟨limitsA, hConvA, hValA, hAgrA⟩
   rcases hAgrA with ⟨E, hfdE, hdimE, hmemE⟩
   refine ⟨E, hfdE, hdimE, ?_⟩
   intro i hi
   have hEq : limitsA i = w.limits i := by
-    exact convergesExactly_unique_aux (hConvA i) (hConvW i)
+    exact convergesTo_unique_aux (hConvA i) (hConvW i)
   have hmem : limitsA i ∈ (E : Set V) := hmemE i
   simpa [hEq] using hmem
 
-/-- Derive root pinning from static causal validity + init constancy on root-reachers. -/
-theorem root_pinning_of_causalValidity
+/-- Predecessor closure: if `j` reaches `i` and `k → j`, then `k` also reaches `i`. -/
+theorem reachable_pred_closed
+    (G : CommGraph n) {i j k : Proc n}
+    (hji : Reachable G j i) (hkj : G.edge k j) :
+    Reachable G k i :=
+  Relation.ReflTransGen.head hkj hji
+
+/--
+Indistinguishability on static traces:
+if two initial configurations agree on the reachability cone of `i`,
+then process `i` has identical states at every round in the two runs.
+-/
+theorem run_static_eq_on_reachers
     (d : StaticImpossibilityData N s)
+    (A : DeterministicAlgorithm V n)
+    (init₁ init₂ : Proc n → V)
+    (i : Proc n)
+    (hEq :
+      ∀ j : Proc n, Reachable d.graph j i → init₁ j = init₂ j) :
+    ∀ t : Round,
+      (A.run (staticTrace (n := n) d.graph) init₁ t) i
+        = (A.run (staticTrace (n := n) d.graph) init₂ t) i := by
+  have hAll :
+      ∀ j : Proc n, Reachable d.graph j i →
+        ∀ t : Round,
+          (A.run (staticTrace (n := n) d.graph) init₁ t) j
+            = (A.run (staticTrace (n := n) d.graph) init₂ t) j := by
+    intro j hji t
+    induction t generalizing j with
+    | zero =>
+        exact hEq j hji
+    | succ t ih =>
+        let x : Proc n → V := A.run (staticTrace (n := n) d.graph) init₁ t
+        let y : Proc n → V := A.run (staticTrace (n := n) d.graph) init₂ t
+        have hlocal :
+            A.step (t + 1) d.graph x j = A.step (t + 1) d.graph y j := by
+          apply A.locality (t := t + 1) (G := d.graph) (x := x) (y := y) (i := j)
+          intro k hkj
+          have hki : Reachable d.graph k i := reachable_pred_closed (n := n) d.graph hji hkj
+          have hxk : x k = y k := ih k hki
+          simpa [x, y] using hxk
+        calc
+          (A.run (staticTrace (n := n) d.graph) init₁ (t + 1)) j
+              = A.step (t + 1) d.graph x j := rfl
+          _ = A.step (t + 1) d.graph y j := hlocal
+          _ = (A.run (staticTrace (n := n) d.graph) init₂ (t + 1)) j := rfl
+  intro t
+  exact hAll i Relation.ReflTransGen.refl t
+
+/--
+Root pinning from locality via indistinguishability:
+compare the given run to a globally constant initialization and use validity on that run.
+-/
+theorem root_pinning_of_locality
+    (d : StaticImpossibilityData N s)
+    (A : DeterministicAlgorithm V n)
+    (hA : SolvesAsymptoticSubspace A N s)
     (init limits : Proc n → V)
-    (hcausal :
+    (hconv :
       ∀ i : Proc n,
-        limits i ∈ convexHull ℝ (init '' ({j : Proc n | Reachable d.graph j i} : Set (Proc n))))
+        ConvergesTo (fun t => (A.run (staticTrace (n := n) d.graph) init t) i) (limits i))
     (hconst : InitConstantOnRootReachers (V := V) (n := n) N s d init) :
     ∀ i : Proc n, i ∈ d.roots → limits i = init i := by
   intro i hi
-  have hlim_mem :
-      limits i ∈ convexHull ℝ (init '' ({j : Proc n | Reachable d.graph j i} : Set (Proc n))) :=
-    hcausal i
-  have hset_eq :
-      init '' ({j : Proc n | Reachable d.graph j i} : Set (Proc n)) = {init i} := by
-    apply Set.Subset.antisymm
-    · intro x hx
-      rcases hx with ⟨j, hj, rfl⟩
-      have : init j = init i := hconst i hi j hj
-      simp [this]
-    · intro x hx
+  let initConst : Proc n → V := fun _ => init i
+  have hEqCone :
+      ∀ j : Proc n, Reachable d.graph j i → init j = initConst j := by
+    intro j hji
+    simpa [initConst] using hconst i hi j hji
+  have htrajEq :
+      ∀ t : Round,
+        (A.run (staticTrace (n := n) d.graph) init t) i
+          = (A.run (staticTrace (n := n) d.graph) initConst t) i :=
+    run_static_eq_on_reachers (V := V) (n := n) N s d A init initConst i hEqCone
+  have hAdm : AdmissibleTrace N (staticTrace (n := n) d.graph) :=
+    admissible_staticTrace (N := N) (s := s) d
+  rcases hA (staticTrace (n := n) d.graph) initConst hAdm with
+    ⟨limitsConst, hConvConst, hValConst, hAgrConst⟩
+  have hconvConstToLimits :
+      ConvergesTo
+        (fun t => (A.run (staticTrace (n := n) d.graph) initConst t) i)
+        (limits i) := by
+    intro ε hε
+    rcases hconv i ε hε with ⟨T, hT⟩
+    refine ⟨T, ?_⟩
+    intro t ht
+    have hEqt :
+        (A.run (staticTrace (n := n) d.graph) initConst t) i
+          = (A.run (staticTrace (n := n) d.graph) init t) i := (htrajEq t).symm
+    simpa [hEqt] using hT t ht
+  have hlimEq : limitsConst i = limits i :=
+    convergesTo_unique_aux (hConvConst i) hconvConstToLimits
+  have hRangeConst : Set.range initConst = ({init i} : Set V) := by
+    ext x
+    constructor
+    · intro hx
+      rcases hx with ⟨j, rfl⟩
+      simp [initConst]
+    · intro hx
       rcases Set.mem_singleton_iff.mp hx with rfl
-      refine ⟨i, ?_, rfl⟩
-      exact Relation.ReflTransGen.refl
-  have : limits i ∈ ({init i} : Set V) := by
-    simpa [hset_eq] using hlim_mem
-  simpa using this
+      exact ⟨i, by simp [initConst]⟩
+  have hVali : limitsConst i ∈ ({init i} : Set V) := by
+    simpa [hRangeConst] using hValConst i
+  have hConstLimit : limitsConst i = init i := by
+    simpa using hVali
+  calc
+    limits i = limitsConst i := hlimEq.symm
+    _ = init i := hConstLimit
 
 /-- A witness-extraction assumption from the graph-theoretic side. -/
 def HasImpossibilityWitness : Prop :=
@@ -898,7 +1035,7 @@ theorem hextract_of_static_pinning
         SolvesAsymptoticSubspace A N s →
         ∀ (init limits : Proc n → V),
           (∀ i : Proc n,
-            ConvergesExactly
+            ConvergesTo
               (fun t => (A.run (staticTrace (n := n) d.graph) init t) i)
               (limits i)) →
           ∀ i : Proc n, i ∈ d.roots → limits i = init i) :
@@ -913,7 +1050,7 @@ theorem hextract_of_static_pinning
     ⟨init, hAff⟩
   let Gseq : Round → CommGraph n := staticTrace (n := n) d.graph
   have hAdm : AdmissibleTrace N Gseq := admissible_staticTrace (N := N) (s := s) d
-  rcases hA Gseq init hAdm with ⟨limits, hConv, hVal, hAgr, hCausal⟩
+  rcases hA Gseq init hAdm with ⟨limits, hConv, hVal, hAgr⟩
   let w : ImpossibilityWitness (V := V) (n := n) N s :=
     { graph := d.graph
       graph_in_adversary := d.graph_in_adversary
@@ -934,9 +1071,9 @@ theorem hextract_of_static_pinning
 /--
 Concrete extraction built from more primitive static assumptions:
 `init` exists with affine independence on roots and constancy on root-reachers,
-and static causal validity holds for solvers.
+and root pinning is derived from locality.
 -/
-theorem hextract_of_static_causal
+theorem hextract_of_static_local
     (d : StaticImpossibilityData N s)
     (hinit :
       ∃ init : Proc n → V,
@@ -951,16 +1088,10 @@ theorem hextract_of_static_causal
   rcases hinit with ⟨init, hAff, hConst⟩
   let Gseq : Round → CommGraph n := staticTrace (n := n) d.graph
   have hAdm : AdmissibleTrace N Gseq := admissible_staticTrace (N := N) (s := s) d
-  rcases hA Gseq init hAdm with ⟨limits, hConv, hVal, hAgr, hCausalAll⟩
-  have hCausal :
-      ∀ i : Proc n,
-        limits i ∈ convexHull ℝ
-          (init '' ({j : Proc n | Reachable d.graph j i} : Set (Proc n))) := by
-    intro i
-    exact hCausalAll d.graph d.graph_in_adversary init limits hConv i
+  rcases hA Gseq init hAdm with ⟨limits, hConv, hVal, hAgr⟩
   have hPin :
       ∀ i : Proc n, i ∈ d.roots → limits i = init i :=
-    root_pinning_of_causalValidity (V := V) (n := n) N s d init limits hCausal hConst
+    root_pinning_of_locality (V := V) (n := n) N s d A hA init limits hConv hConst
   let w : ImpossibilityWitness (V := V) (n := n) N s :=
     { graph := d.graph
       graph_in_adversary := d.graph_in_adversary
@@ -1146,7 +1277,7 @@ theorem lemma_imposs_unsolvable_full_static
         InitConstantOnRootReachers (V := V) (n := n) N s d init :=
     exists_init_for_static_data (V := V) (n := n) N s d hfin
   apply lemma_imposs_unsolvable_full_concrete (V := V) (n := n) N s hnotRooted hfin
-  exact hextract_of_static_causal (V := V) (n := n) N s d hinit
+  exact hextract_of_static_local (V := V) (n := n) N s d hinit
 
 /-- Paper-level "model grounded" assumption for the impossibility construction. -/
 def ModelGrounded : Prop :=
@@ -1180,6 +1311,83 @@ theorem lemma_imposs_unsolvable_full_exact
     modelGrounded_of_not_kRootedAdversary (n := n) (N := N) (s := s) hnotRooted
   exact lemma_imposs_unsolvable_full_model_grounded
     (V := V) (n := n) N s hnotRooted hfin hgrounded
+
+/--
+Paper-faithful full unsolvability:
+if the adversary is not `(s+1)`-rooted and `dim(V) > s`, then no local deterministic
+algorithm can satisfy asymptotic set-convergence validity and subspace agreement.
+-/
+theorem lemma_imposs_unsolvable_full_paper
+    (hnotRooted : ¬ IsKRootedAdversary N (s + 1))
+    (hfin : s < Module.finrank ℝ V) :
+    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspacePaper A N s := by
+  intro hAex
+  rcases hAex with ⟨A, hA⟩
+  have hgrounded : ModelGrounded (N := N) (s := s) :=
+    modelGrounded_of_not_kRootedAdversary (n := n) (N := N) (s := s) hnotRooted
+  rcases hgrounded with ⟨d⟩
+  rcases exists_init_for_static_data (V := V) (n := n) N s d hfin with ⟨init, hAff, hConst⟩
+  let Gseq : Round → CommGraph n := staticTrace (n := n) d.graph
+  have hAdm : AdmissibleTrace N Gseq := admissible_staticTrace (N := N) (s := s) d
+  rcases hA Gseq init hAdm with ⟨E, hfdE, hdimE, hToE, hToHull⟩
+  have hclosedDir : IsClosed (E.direction : Set V) := by
+    letI : FiniteDimensional ℝ E.direction := hfdE
+    exact Submodule.closed_of_finiteDimensional (s := E.direction)
+  have hclosedE : IsClosed (E : Set V) :=
+    (AffineSubspace.isClosed_direction_iff (R := ℝ) (V := V) (P := V) E).1 hclosedDir
+  have hsubset :
+      Set.range (fun p : d.roots => init p) ⊆ (E : Set V) := by
+    intro x hx
+    rcases hx with ⟨p, rfl⟩
+    have hp : (p : Proc n) ∈ d.roots := p.property
+    let initConst : Proc n → V := fun _ => init p
+    have hEqCone :
+        ∀ j : Proc n, Reachable d.graph j p → init j = initConst j := by
+      intro j hjp
+      simpa [initConst] using hConst p hp j hjp
+    have htrajEq :
+        ∀ t : Round,
+          (A.run Gseq init t) p = (A.run Gseq initConst t) p :=
+      run_static_eq_on_reachers (V := V) (n := n) N s d A init initConst p hEqCone
+    rcases hA Gseq initConst hAdm with ⟨Econst, hfdConst, hdimConst, hToEConst, hToHullConst⟩
+    have hRangeConst : Set.range initConst = ({init p} : Set V) := by
+      ext y
+      constructor
+      · intro hy
+        rcases hy with ⟨j, rfl⟩
+        simp [initConst]
+      · intro hy
+        rcases Set.mem_singleton_iff.mp hy with rfl
+        exact ⟨p, by simp [initConst]⟩
+    have hToSingletonConst :
+        ConvergesToSet (fun t => (A.run Gseq initConst t) p) ({init p} : Set V) := by
+      simpa [hRangeConst, convexHull_singleton] using hToHullConst p
+    have hToPointConst :
+        ConvergesTo (fun t => (A.run Gseq initConst t) p) (init p) :=
+      (convergesToSet_singleton_iff).1 hToSingletonConst
+    have hToPoint :
+        ConvergesTo (fun t => (A.run Gseq init t) p) (init p) := by
+      intro ε hε
+      rcases hToPointConst ε hε with ⟨T, hT⟩
+      refine ⟨T, ?_⟩
+      intro t ht
+      have hEqt : (A.run Gseq initConst t) p = (A.run Gseq init t) p := (htrajEq t).symm
+      simpa [hEqt] using hT t ht
+    have hInClosureE :
+        init p ∈ closure (E : Set V) := by
+      exact mem_closure_of_convergesTo_and_convergesToSet
+        (hTo := hToPoint) (hToSet := hToE p)
+    have hmemE : init p ∈ (E : Set V) := by
+      simpa [hclosedE.closure_eq] using hInClosureE
+    simpa using hmemE
+  have hcard : Fintype.card d.roots = s + 2 := by
+    simpa using d.roots_card
+  have hcontra :=
+    lemma_imposs_complete
+      (xLim := fun p : d.roots => init p)
+      hcard
+      hAff
+  exact hcontra ⟨E, hfdE, hdimE, hsubset⟩
 
 end ImpossibilityModel
 

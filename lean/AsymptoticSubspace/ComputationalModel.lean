@@ -40,7 +40,7 @@ def IsKRootedAdversary {n : Nat} (N : ObliviousMessageAdversary n) (k : Nat) : P
 
 section Model
 
-variable {V : Type*} [AddCommGroup V] [Module ℝ V]
+variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
 variable {n : Nat}
 
 /--
@@ -90,11 +90,50 @@ lemma weights_sum_one (t : Round) (i : Proc n) :
     (∑ j : Proc n, E.weights t i j) = 1 :=
   E.weights_row_sum t i
 
+/--
+Single-step constant preservation for averaging executions:
+if all round-`t` outputs are `c`, then all round-`t+1` outputs are also `c`.
+-/
+lemma output_succ_eq_const_of_outputs_const
+    (t : Round) (i : Proc n) (c : V)
+    (hconst : ∀ j : Proc n, E.outputs t j = c) :
+    E.outputs (t + 1) i = c := by
+  calc
+    E.outputs (t + 1) i
+        = ∑ j : Proc n, (E.weights (t + 1) i j) • E.outputs t j :=
+          E.output_succ_eq_weighted_sum t i
+    _ = ∑ j : Proc n, (E.weights (t + 1) i j) • c := by
+          simp [hconst]
+    _ = (∑ j : Proc n, E.weights (t + 1) i j) • c := by
+          rw [Finset.sum_smul]
+    _ = c := by
+          simp [E.weights_sum_one (t + 1) i]
+
+/--
+Global constant preservation for averaging executions:
+if round `0` is constant `c`, then every round remains constant `c`.
+-/
+lemma outputs_eq_const_of_initial_const
+    (c : V) (h0 : ∀ i : Proc n, E.outputs 0 i = c) :
+    ∀ t : Round, ∀ i : Proc n, E.outputs t i = c := by
+  intro t
+  induction t with
+  | zero =>
+      intro i
+      exact h0 i
+  | succ t ih =>
+      intro i
+      exact E.output_succ_eq_const_of_outputs_const t i c ih
+
 end AveragingExecution
 
 /-- Deterministic round-based algorithm over vector outputs. -/
-structure DeterministicAlgorithm (V : Type*) [AddCommGroup V] [Module ℝ V] (n : Nat) where
+structure DeterministicAlgorithm (V : Type*) [NormedAddCommGroup V] [NormedSpace ℝ V] (n : Nat) where
   step : Round → CommGraph n → (Proc n → V) → Proc n → V
+  locality :
+    ∀ t G x y i,
+      (∀ j : Proc n, G.edge j i → x j = y j) →
+      step t G x i = step t G y i
 
 namespace DeterministicAlgorithm
 
@@ -112,19 +151,24 @@ def AdmissibleTrace
     {n : Nat} (N : ObliviousMessageAdversary n) (Gseq : Round → CommGraph n) : Prop :=
   ∀ t : Round, Gseq t ∈ N.graphs
 
-/-- Exact eventual convergence to `l` (strong form used to avoid topological assumptions). -/
-def ConvergesExactly {V : Type*} (x : Round → V) (l : V) : Prop :=
-  ∃ T : Round, ∀ t : Round, T ≤ t → x t = l
+/-- Asymptotic convergence to `l` in norm (`‖x(t)-l‖ → 0`). -/
+def ConvergesTo {V : Type*} [NormedAddCommGroup V] (x : Round → V) (l : V) : Prop :=
+  ∀ ε : ℝ, 0 < ε → ∃ T : Round, ∀ t : Round, T ≤ t → ‖x t - l‖ < ε
+
+/-- Asymptotic convergence onto a set (`dist(x(t), S) → 0`). -/
+def ConvergesToSet {V : Type*} [NormedAddCommGroup V] (x : Round → V) (S : Set V) : Prop :=
+  S.Nonempty ∧
+    (∀ ε : ℝ, 0 < ε → ∃ T : Round, ∀ t : Round, T ≤ t → Metric.infDist (x t) S < ε)
 
 /-- Validity at limits: every process limit lies in the convex hull of initial outputs. -/
 def ValidityAtLimit
-    {V : Type*} [AddCommGroup V] [Module ℝ V] {n : Nat}
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] {n : Nat}
     (init limits : Proc n → V) : Prop :=
   ∀ i : Proc n, limits i ∈ convexHull ℝ (Set.range init)
 
 /-- Subspace agreement at limits for target dimension `s`. -/
 def SubspaceAgreementAtLimit
-    {V : Type*} [AddCommGroup V] [Module ℝ V] {n : Nat}
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] {n : Nat}
     (s : Nat) (limits : Proc n → V) : Prop :=
   ∃ E : AffineSubspace ℝ V,
     FiniteDimensional ℝ E.direction ∧
@@ -133,24 +177,36 @@ def SubspaceAgreementAtLimit
 
 /--
 Algorithm-level solvability of `d`-to-`s` asymptotic subspace consensus in adversary `N`
-using exact eventual convergence.
+using asymptotic convergence (`dist → 0`).
 -/
 def SolvesAsymptoticSubspace
-    {V : Type*} [AddCommGroup V] [Module ℝ V] {n : Nat}
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] {n : Nat}
     (A : DeterministicAlgorithm V n)
     (N : ObliviousMessageAdversary n) (s : Nat) : Prop :=
   ∀ (Gseq : Round → CommGraph n) (init : Proc n → V),
     AdmissibleTrace N Gseq →
     ∃ limits : Proc n → V,
-      (∀ i : Proc n, ConvergesExactly (fun t => (A.run Gseq init t) i) (limits i)) ∧
+      (∀ i : Proc n, ConvergesTo (fun t => (A.run Gseq init t) i) (limits i)) ∧
       ValidityAtLimit init limits ∧
-      SubspaceAgreementAtLimit s limits ∧
-      (∀ (G : CommGraph n), G ∈ N.graphs →
-        ∀ (init' limits' : Proc n → V),
-          (∀ i : Proc n,
-            ConvergesExactly (fun t => (A.run (fun _ => G) init' t) i) (limits' i)) →
-          ∀ i : Proc n,
-            limits' i ∈ convexHull ℝ (init' '' ({j : Proc n | Reachable G j i} : Set (Proc n))))
+      SubspaceAgreementAtLimit s limits
+
+/--
+Paper-faithful solver specification:
+- all process trajectories converge onto one `s`-dimensional affine subspace,
+- and each trajectory converges onto the convex hull of the initial values.
+-/
+def SolvesAsymptoticSubspacePaper
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] {n : Nat}
+    (A : DeterministicAlgorithm V n)
+    (N : ObliviousMessageAdversary n) (s : Nat) : Prop :=
+  ∀ (Gseq : Round → CommGraph n) (init : Proc n → V),
+    AdmissibleTrace N Gseq →
+    ∃ E : AffineSubspace ℝ V,
+      FiniteDimensional ℝ E.direction ∧
+      Module.finrank ℝ E.direction ≤ s ∧
+      (∀ i : Proc n, ConvergesToSet (fun t => (A.run Gseq init t) i) (E : Set V)) ∧
+      (∀ i : Proc n,
+        ConvergesToSet (fun t => (A.run Gseq init t) i) (convexHull ℝ (Set.range init)))
 
 /-- `α`-safe averaging: every received value gets weight at least `α`. -/
 def AlphaSafe (E : AveragingExecution (V := V) n) (α : ℝ) : Prop :=

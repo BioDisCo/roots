@@ -30,7 +30,7 @@ theorem lemma_concave_line_zero
 
 theorem lemma_xi_xip
     -- TeX label: lem:xi_xip
-    {V : Type*} [AddCommGroup V] [Module ℝ V]
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
     {n : Nat}
     (E : AveragingExecution (V := V) n)
     (M : Round → Finset (Proc n))
@@ -44,7 +44,7 @@ theorem lemma_xi_xip
 
 theorem lemma_differences
     -- TeX label: lem:differences
-    {V : Type*} [AddCommGroup V] [Module ℝ V]
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
     {n : Nat}
     (E : AveragingExecution (V := V) n)
     (M : Round → Finset (Proc n))
@@ -65,12 +65,12 @@ theorem lemma_differences
 
 theorem lemma_imposs
     -- TeX label: lem:imposs
-    {V : Type*} [AddCommGroup V] [Module ℝ V]
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
     {n : Nat} (N : ObliviousMessageAdversary n) (s : Nat)
     (hnotRooted : ¬ IsKRootedAdversary N (s + 1))
     (hfin : s < Module.finrank ℝ V) :
-    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspace A N s :=
-  lemma_imposs_unsolvable_full_exact
+    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspacePaper A N s :=
+  lemma_imposs_unsolvable_full_paper
     (V := V) (n := n) N s hnotRooted hfin
 
 end TopLevelLemmas
