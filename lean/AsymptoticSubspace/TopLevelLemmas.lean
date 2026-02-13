@@ -68,15 +68,10 @@ theorem lemma_imposs
     {V : Type*} [AddCommGroup V] [Module ℝ V]
     {n : Nat} (N : ObliviousMessageAdversary n) (s : Nat)
     (hnotRooted : ¬ IsKRootedAdversary N (s + 1))
-    (hfin : s < Module.finrank ℝ V)
-    (hextract :
-      ¬ IsKRootedAdversary N (s + 1) →
-      s < Module.finrank ℝ V →
-      ∀ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspace A N s →
-        ∃ w : ImpossibilityWitness (V := V) (n := n) N s,
-          RealizableWitnessBy (V := V) (n := n) N s A w) :
+    (hfin : s < Module.finrank ℝ V) :
     ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspace A N s :=
-  lemma_imposs_unsolvable_full_concrete (V := V) (n := n) N s hnotRooted hfin hextract
+  lemma_imposs_unsolvable_full_exact
+    (V := V) (n := n) N s hnotRooted hfin
 
 end TopLevelLemmas
 end AsymptoticSubspace

@@ -144,7 +144,13 @@ def SolvesAsymptoticSubspace
     ∃ limits : Proc n → V,
       (∀ i : Proc n, ConvergesExactly (fun t => (A.run Gseq init t) i) (limits i)) ∧
       ValidityAtLimit init limits ∧
-      SubspaceAgreementAtLimit s limits
+      SubspaceAgreementAtLimit s limits ∧
+      (∀ (G : CommGraph n), G ∈ N.graphs →
+        ∀ (init' limits' : Proc n → V),
+          (∀ i : Proc n,
+            ConvergesExactly (fun t => (A.run (fun _ => G) init' t) i) (limits' i)) →
+          ∀ i : Proc n,
+            limits' i ∈ convexHull ℝ (init' '' ({j : Proc n | Reachable G j i} : Set (Proc n))))
 
 /-- `α`-safe averaging: every received value gets weight at least `α`. -/
 def AlphaSafe (E : AveragingExecution (V := V) n) (α : ℝ) : Prop :=

@@ -268,3 +268,7 @@ TSWLatexianTemp*
 
 # MacOS
 .DS_Store
+
+*.vtc
+
+.lake
