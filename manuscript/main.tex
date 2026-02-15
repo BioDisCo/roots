@@ -245,6 +245,7 @@ We conclude in Section~\ref{sec:conclusion}.
 
 Some definitions and results have been formalized in the Lean~4 proof assistant~\cite{lean4} using the Mathlib library.
 Results marked with \leanproof{} have machine-checked proofs; definitions and statements marked with \leanformalized{} have been formalized without a complete proof.
+The Lean formalizations and proofs were generated with the assistance of Claude Opus~4.6 and GPT-5.3-Codex.
 These formalizations serve as supplementary information and are not meant as replacements for the natural-language proofs in this paper.
 Clicking a badge links to the corresponding Lean source code.
 
@@ -394,6 +395,7 @@ Asymptotic consensus on scalar inputs is a special case with $d=1$ and $s=0$.
 We first show a lower bound on the attainable dimensionality reduction in asymptotic subspace consensus in terms of the sizes of the root sets of oblivious message adversaries.
 The proof is a generalization of the impossibility of asymptotic consensus in non-rooted oblivious message adversaries \cite{CBFN15:icalp}.
 It does not rely on the dynamics of the communication network and requires a single static communication graph only, where a sufficiently large number of processes are isolated and remain on their initial values.
+The proof is given in the Appendix.
 
 \begin{theoremrep}[\leanproof{\leanurl{ThmImposs.lean}}]\label{lem:imposs}
 For $d > s \geq 0$, the $d$-to-$s$-dimensional asymptotic subspace consensus problem is unsolvable in oblivious message adversaries that are not $(s+1)$-rooted.
@@ -547,7 +549,7 @@ For any averaging algorithm, processes only update their output to a value withi
 Thus any open half-space $H$ that does not contain points in round $t \ge 0$ will not contain points in round $t+1$.
 In fact one can say more for executions in oblivious message adversaries that are $k$-broadcastable, for some $k \geq 1$: processes update their outputs to values that have a minimum distance to such empty half-spaces.
 This is due to them being attracted by the values of the broadcasting set.
-The following lemma establishes a lower bound on this distance (Figure~\ref{fig:panel_2}a).
+The following lemma establishes a lower bound on this distance (Figure~\ref{fig:panel_2}a); its proof is given in the Appendix.
 
 \begin{lemmarep}[\leanproof{\leanurl{LemHalfspaceZone.lean}}]\label{lem:halfspace:zone}
 Consider an averaging algorithm executed in some $k$-broadcastable oblivious message adversary with minimum broadcasting weight $\alpha > 0$ and fix a round $t \geq 1$.
@@ -642,6 +644,7 @@ We will later use these to bound the radius function~$r$.
     \label{fig:panel_2}
 \end{figure}
 
+The following two lemmas on concave functions are proved in the Appendix.
 
 \begin{lemmarep}[\leanproof{\leanurl{LemConcaveLine.lean}}]\label{lem:concave:line}
 Let $a,b,c \in \IR$ with $a<b<c$
@@ -736,6 +739,7 @@ This shows the claimed inequalities.
 
 This linear bound allows us to show that any $\alpha$-quantile of a symmetric
 body on the first axis (red in Figure~\ref{fig:panel_2}d) contains a non-negligible portion of the total volume.
+The proof is given in the Appendix.
 
 \begin{lemmarep}[\leanproof{\leanurl{LemVolumes.lean}}]\label{lem:volumes}
 Let $h\in\IR_+$, let $\alpha \in (0,1)$, and let $r:\IR \to \IR_+$ be a measurable function that is concave in $[0,h]$.
@@ -1053,7 +1057,7 @@ We combine these to follow the dynamics of the thickness with respect to the lat
 We then show (Lemmas~\ref{lem:accumulation_point} and~\ref{lem:continuity}) that the orthogonal projections constructed from the broadcasting set have an accumulation point and the thickness is continuous in the projections, allowing us to measure contraction of the thickness with respect to this accumulation point (Lemma~\ref{lem:Delta-contraction}).
 
 We start with the decomposition of node values into convex combinations of values from the broadcasting set
-  and all node values.
+  and all node values; the proof is given in the Appendix.
 
 \begin{lemmarep}[\leanproof{\leanurl{LemXiXip.lean}}]\label{lem:xi_xip}
 Assume an averaging algorithm with minimum broadcasting weight $\alpha > 0$.
@@ -1150,6 +1154,8 @@ Thus $\cal P$ is compact.
 
 From the compactness of $\cal P$, it follows that the sequence $(\Pi_t)_{t \geq 1}$, with each $\Pi_t \in {\cal P}$, has an accumulation point in ${\cal P}$.
 \end{proof}
+
+The following lemma is proved in the Appendix.
 
 \begin{lemmarep}[\leanproof{\leanurl{LemContinuity.lean}}]\label{lem:continuity}
 For any finite non-empty set $X \subseteq \IR^d$ and with ${\cal P}$ being the set of orthogonal projections in $\IR^d$, the function $\Pi \mapsto \Delta_\Pi(X) : {\cal P} \to \IR$ is Lipschitz continuous.

@@ -16,8 +16,15 @@ TeX label: `lem:contract`.
 Volume contraction per round: if `|(M (t+1))| ≤ d = finrank ℝ V`,
 then the `d`-dimensional volume contracts by factor `(1 - α^d)`.
 
-Mathlib v4.27.0 does not yet provide the Steiner-symmetrization/Brunn-Minkowski
-machinery used in the paper proof, so the final contraction step is left as `sorry`.
+Formalization status: partial (`sorry`).
+Blocking gap:
+- Mathlib v4.27.0 does not yet provide the Steiner-symmetrization /
+  Brunn-Minkowski machinery needed for the final contraction step.
+Missing ingredients:
+- Steiner-type symmetrization of `Poly E t` along a coordinate axis.
+- Brunn-Minkowski-based concavity of the section-radius profile.
+- A directly usable formalization of the paper's volume estimate (`lem:volumes`).
+- Final composition with monotonicity `Poly E (t + 1) ⊆ Poly E t`.
 -/
 theorem lemma_contract
     [NeZero n]
@@ -31,13 +38,6 @@ theorem lemma_contract
     (hcard : (M (t + 1)).card ≤ Module.finrank ℝ V) :
     volume (Poly E (t + 1)) ≤
       ENNReal.ofReal (1 - α ^ Module.finrank ℝ V) * volume (Poly E t) := by
-  /-
-  Missing formal ingredients:
-  1. Steiner-type symmetrization of `Poly E t` along a coordinate axis.
-  2. Brunn-Minkowski-based concavity of the section-radius profile.
-  3. The paper's volume integral estimate (`lem:volumes`) in a usable Mathlib form.
-  4. Combination with monotonicity `Poly E (t + 1) ⊆ Poly E t`.
-  -/
   sorry
 
 end AsymptoticSubspace
