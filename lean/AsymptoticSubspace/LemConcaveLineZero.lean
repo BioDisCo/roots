@@ -2,7 +2,7 @@
 -- For a concave nonneg function r on [a,c], the zero line through (b, r(b))
 -- lies above r on [a,b] and below r on [b,c].
 
-import AsymptoticSubspace.PaperFormalization
+import AsymptoticSubspace.PaperFormalizationCore
 
 noncomputable section
 

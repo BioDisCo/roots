@@ -2,7 +2,7 @@
 -- A sequence of orthogonal projections has a convergent subsequence
 -- whose limit is also an orthogonal projection.
 
-import AsymptoticSubspace.PaperFormalization
+import AsymptoticSubspace.PaperFormalizationCore
 
 noncomputable section
 

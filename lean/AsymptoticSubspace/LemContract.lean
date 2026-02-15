@@ -1,4 +1,4 @@
-import AsymptoticSubspace.ModelBridge
+import AsymptoticSubspace.ModelBridgeCore
 
 noncomputable section
 

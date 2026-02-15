@@ -1,4 +1,6 @@
-import AsymptoticSubspace.ModelBridge
+-- Internal plumbing module.
+-- Reader-facing statement is in `LemHalfspaceZone.lean`.
+import AsymptoticSubspace.ModelBridgeCore
 
 noncomputable section
 

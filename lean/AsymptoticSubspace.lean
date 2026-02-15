@@ -1,22 +1,21 @@
-import AsymptoticSubspace.ComputationalModel
-import AsymptoticSubspace.PaperFormalization
-import AsymptoticSubspace.ModelBridge
-import AsymptoticSubspace.ImpossibilityProof
-import AsymptoticSubspace.HalfspaceZoneProof
-import AsymptoticSubspace.LemDeltaContraction
-import AsymptoticSubspace.LemContract
-import AsymptoticSubspace.ThmSolving
+-- Public entrypoint: paper-facing definitions, lemmas, and theorems.
 import AsymptoticSubspace.DefComputationalModel
 import AsymptoticSubspace.DefMinimumBroadcastWeight
 import AsymptoticSubspace.DefThickness
+
 import AsymptoticSubspace.LemHalfspaceDistFormula
 import AsymptoticSubspace.LemHalfspaceZone
 import AsymptoticSubspace.LemConcaveLine
 import AsymptoticSubspace.LemConcaveLineZero
 import AsymptoticSubspace.LemVolumes
+
 import AsymptoticSubspace.LemXiXip
 import AsymptoticSubspace.LemDifferences
 import AsymptoticSubspace.LemAccumulationPoint
 import AsymptoticSubspace.LemContinuity
+import AsymptoticSubspace.LemDeltaContraction
+import AsymptoticSubspace.LemContract
 import AsymptoticSubspace.LemConvexZeroHyperplane
+
+import AsymptoticSubspace.ThmSolving
 import AsymptoticSubspace.ThmImposs

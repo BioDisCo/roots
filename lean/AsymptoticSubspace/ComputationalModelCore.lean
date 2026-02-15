@@ -1,3 +1,5 @@
+-- Internal plumbing module.
+-- Reader-facing statements live in `DefComputationalModel.lean`.
 import Mathlib
 
 noncomputable section
@@ -180,7 +182,7 @@ def SubspaceAgreementAtLimit
 Algorithm-level solvability of `d`-to-`s` asymptotic subspace consensus in adversary `N`
 using asymptotic convergence (`dist → 0`).
 -/
-def SolvesAsymptoticSubspace
+def SolvesAsymptoticSubspaceWithLimits
     {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] {n : Nat}
     (A : DeterministicAlgorithm V n)
     (N : ObliviousMessageAdversary n) (s : Nat) : Prop :=
@@ -196,7 +198,7 @@ Paper-faithful solver specification:
 - all process trajectories converge onto one `s`-dimensional affine subspace,
 - and each trajectory converges onto the convex hull of the initial values.
 -/
-def SolvesAsymptoticSubspacePaper
+def SolvesAsymptoticSubspace
     {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] {n : Nat}
     (A : DeterministicAlgorithm V n)
     (N : ObliviousMessageAdversary n) (s : Nat) : Prop :=

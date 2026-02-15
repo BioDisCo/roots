@@ -2,7 +2,7 @@
 -- If the adversary is not (s+1)-rooted and dim(V) > s, then no local deterministic
 -- algorithm can solve asymptotic subspace consensus.
 
-import AsymptoticSubspace.ImpossibilityProof
+import AsymptoticSubspace.ImpossibilityProofCore
 
 noncomputable section
 
@@ -15,7 +15,7 @@ theorem lemma_imposs
     {n : Nat} (N : ObliviousMessageAdversary n) (s : Nat)
     (hnotRooted : ¬ IsKRootedAdversary N (s + 1))
     (hfin : s < Module.finrank ℝ V) :
-    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspacePaper A N s :=
+    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspace A N s :=
   lemma_imposs_unsolvable_full_paper
     (V := V) (n := n) N s hnotRooted hfin
 

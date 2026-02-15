@@ -2,7 +2,7 @@
 -- Decomposition of process outputs into a convex combination of a broadcasting-set
 -- component and a residual component.
 
-import AsymptoticSubspace.ModelBridge
+import AsymptoticSubspace.ModelBridgeCore
 
 noncomputable section
 

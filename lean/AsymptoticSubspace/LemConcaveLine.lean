@@ -2,7 +2,7 @@
 -- For a concave function r on [a,c], the secant line through (b, r(b)) and (c, r(c))
 -- lies above r on [a,b] and below r on [b,c].
 
-import AsymptoticSubspace.PaperFormalization
+import AsymptoticSubspace.PaperFormalizationCore
 
 noncomputable section
 

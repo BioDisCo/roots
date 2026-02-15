@@ -1,3 +1,5 @@
+-- Internal plumbing module.
+-- Reader-facing statements live in `Lem*` and `Thm*` files.
 import Mathlib
 
 noncomputable section

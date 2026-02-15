@@ -2,7 +2,7 @@
 -- If X(t) ∩ H = ∅ for an open half-space H, then
 -- dist(X(t+1), H) ≥ α * dist(P_{M(t+1)}(t), H).
 
-import AsymptoticSubspace.HalfspaceZoneProof
+import AsymptoticSubspace.HalfspaceZoneProofCore
 
 noncomputable section
 

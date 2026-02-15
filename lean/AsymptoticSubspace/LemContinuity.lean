@@ -2,7 +2,7 @@
 -- The thickness function is Lipschitz continuous in the projection operator,
 -- with Lipschitz constant equal to the pairDiameter of the point set.
 
-import AsymptoticSubspace.ModelBridge
+import AsymptoticSubspace.ModelBridgeCore
 
 noncomputable section
 

@@ -1,5 +1,7 @@
-import AsymptoticSubspace.ComputationalModel
-import AsymptoticSubspace.PaperFormalization
+-- Internal plumbing module.
+-- Reader-facing statements live in `Def*`, `Lem*`, and `Thm*` files.
+import AsymptoticSubspace.ComputationalModelCore
+import AsymptoticSubspace.PaperFormalizationCore
 
 noncomputable section
 

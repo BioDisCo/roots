@@ -1,4 +1,6 @@
-import AsymptoticSubspace.ModelBridge
+-- Internal plumbing module.
+-- Reader-facing statement is in `ThmImposs.lean`.
+import AsymptoticSubspace.ModelBridgeCore
 
 noncomputable section
 
@@ -228,7 +230,7 @@ Bridge assumption from full algorithm semantics to the witness model:
 any algorithm solving the full spec would induce witness-level agreement.
 -/
 def FullToWitnessReduction : Prop :=
-  (∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspace A N s) →
+  (∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspaceWithLimits A N s) →
     Solves_d_to_s (V := V) (n := n) N s
 
 /-- Witness `w` is realizable by algorithm `A` on some admissible trace from `w.init`. -/
@@ -326,7 +328,7 @@ must match initials on the distinguished root set.
 -/
 def RootPinningOnStaticData (d : StaticImpossibilityData N s) : Prop :=
   ∀ (A : DeterministicAlgorithm V n),
-    SolvesAsymptoticSubspace A N s →
+    SolvesAsymptoticSubspaceWithLimits A N s →
     ∀ (init limits : Proc n → V),
       (∀ i : Proc n,
         ConvergesTo (fun t => (A.run (staticTrace (n := n) d.graph) init t) i) (limits i)) →
@@ -344,7 +346,7 @@ derive witness-level subspace agreement on `w.limits`.
 -/
 theorem agreement_on_realizable_witness
     (A : DeterministicAlgorithm V n)
-    (hA : SolvesAsymptoticSubspace A N s)
+    (hA : SolvesAsymptoticSubspaceWithLimits A N s)
     (w : ImpossibilityWitness (V := V) (n := n) N s)
     (hreal : RealizableWitnessBy (V := V) (n := n) N s A w) :
     SubspaceAgreementOn (V := V) (n := n) s w.roots w.limits := by
@@ -414,7 +416,7 @@ compare the given run to a globally constant initialization and use validity on 
 theorem root_pinning_of_locality
     (d : StaticImpossibilityData N s)
     (A : DeterministicAlgorithm V n)
-    (hA : SolvesAsymptoticSubspace A N s)
+    (hA : SolvesAsymptoticSubspaceWithLimits A N s)
     (init limits : Proc n → V)
     (hconv :
       ∀ i : Proc n,
@@ -603,7 +605,7 @@ theorem hextract_of_static_pinning
     (d : StaticImpossibilityData N s)
     (hpin :
       ∀ (A : DeterministicAlgorithm V n),
-        SolvesAsymptoticSubspace A N s →
+        SolvesAsymptoticSubspaceWithLimits A N s →
         ∀ (init limits : Proc n → V),
           (∀ i : Proc n,
             ConvergesTo
@@ -612,7 +614,7 @@ theorem hextract_of_static_pinning
           ∀ i : Proc n, i ∈ d.roots → limits i = init i) :
     ¬ IsKRootedAdversary N (s + 1) →
     s < Module.finrank ℝ V →
-    ∀ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspace A N s →
+    ∀ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspaceWithLimits A N s →
       ∃ w : ImpossibilityWitness (V := V) (n := n) N s,
         RealizableWitnessBy (V := V) (n := n) N s A w := by
   intro hnotRooted hsfin A hA
@@ -652,7 +654,7 @@ theorem hextract_of_static_local
         InitConstantOnRootReachers (V := V) (n := n) N s d init) :
     ¬ IsKRootedAdversary N (s + 1) →
     s < Module.finrank ℝ V →
-    ∀ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspace A N s →
+    ∀ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspaceWithLimits A N s →
       ∃ w : ImpossibilityWitness (V := V) (n := n) N s,
         RealizableWitnessBy (V := V) (n := n) N s A w := by
   intro hnotRooted hsfin A hA
@@ -807,7 +809,7 @@ theorem lemma_imposs_unsolvable_full
     (hnotRooted : ¬ IsKRootedAdversary N (s + 1))
     (hfin : s < Module.finrank ℝ V)
     (hreduce : FullToWitnessReduction (V := V) (n := n) N s) :
-    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspace A N s := by
+    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspaceWithLimits A N s := by
   intro hA
   have hwitnessSolve : Solves_d_to_s (V := V) (n := n) N s := hreduce hA
   exact lemma_imposs_unsolvable_final (V := V) (n := n) N s hnotRooted hfin hwitnessSolve
@@ -822,10 +824,10 @@ theorem lemma_imposs_unsolvable_full_concrete
     (hextract :
       ¬ IsKRootedAdversary N (s + 1) →
       s < Module.finrank ℝ V →
-      ∀ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspace A N s →
+      ∀ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspaceWithLimits A N s →
         ∃ w : ImpossibilityWitness (V := V) (n := n) N s,
           RealizableWitnessBy (V := V) (n := n) N s A w) :
-    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspace A N s := by
+    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspaceWithLimits A N s := by
   intro hAex
   rcases hAex with ⟨A, hA⟩
   rcases hextract hnotRooted hfin A hA with ⟨w, hreal⟩
@@ -841,7 +843,7 @@ theorem lemma_imposs_unsolvable_full_static
     (hnotRooted : ¬ IsKRootedAdversary N (s + 1))
     (hfin : s < Module.finrank ℝ V)
     (d : StaticImpossibilityData N s) :
-    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspace A N s := by
+    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspaceWithLimits A N s := by
   have hinit :
       ∃ init : Proc n → V,
         AffineIndependent ℝ (fun p : d.roots => init p) ∧
@@ -870,14 +872,14 @@ theorem lemma_imposs_unsolvable_full_model_grounded
     (hnotRooted : ¬ IsKRootedAdversary N (s + 1))
     (hfin : s < Module.finrank ℝ V)
     (hgrounded : ModelGrounded (N := N) (s := s)) :
-    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspace A N s := by
+    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspaceWithLimits A N s := by
   rcases hgrounded with ⟨d⟩
   exact lemma_imposs_unsolvable_full_static (V := V) (n := n) N s hnotRooted hfin d
 
 theorem lemma_imposs_unsolvable_full_exact
     (hnotRooted : ¬ IsKRootedAdversary N (s + 1))
     (hfin : s < Module.finrank ℝ V) :
-    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspace A N s := by
+    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspaceWithLimits A N s := by
   have hgrounded : ModelGrounded (N := N) (s := s) :=
     modelGrounded_of_not_kRootedAdversary (n := n) (N := N) (s := s) hnotRooted
   exact lemma_imposs_unsolvable_full_model_grounded
@@ -891,7 +893,7 @@ algorithm can satisfy asymptotic set-convergence validity and subspace agreement
 theorem lemma_imposs_unsolvable_full_paper
     (hnotRooted : ¬ IsKRootedAdversary N (s + 1))
     (hfin : s < Module.finrank ℝ V) :
-    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspacePaper A N s := by
+    ¬ ∃ A : DeterministicAlgorithm V n, SolvesAsymptoticSubspace A N s := by
   intro hAex
   rcases hAex with ⟨A, hA⟩
   have hgrounded : ModelGrounded (N := N) (s := s) :=
