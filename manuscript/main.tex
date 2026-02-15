@@ -7,12 +7,10 @@
 %\usepackage{thmtools}
 % \usepackage{thm-restate}
 
-% Lean badge
-\usepackage{hyperref}
+% Lean badges (verified-badges package)
 \usepackage{graphicx}
-\newcommand{\leanproof}[1]{%
-  \href{#1}{\raisebox{-2pt}{\includegraphics[height=1.2em]{lean-verified-badge.pdf}}}%
-}
+\usepackage{verified-badges}
+\newcommand{\leanurl}[1]{https://github.com/BioDisCo/roots/blob/master/lean/AsymptoticSubspace/#1}
 
 
 %
@@ -245,7 +243,7 @@ Again, we show that this holds in the general case.
 
 We conclude in Section~\ref{sec:conclusion}.
 
-Results marked with \leanproof{} have been formally verified in the Lean~4 proof assistant using the Mathlib library; clicking the badge links to the corresponding Lean source code.
+Results marked with \leanproof{} have been formally verified in the Lean~4 proof assistant using the Mathlib library; results marked with \leanformalized{} have their statements formalized. Clicking the badge links to the corresponding Lean source code.
 
 \begin{figure}[hpt]
     \centering
@@ -262,7 +260,7 @@ Results marked with \leanproof{} have been formally verified in the Lean~4 proof
 
 
 
-\section{Computational Model}\label{sec:model}
+\section{Computational Model\leanformalized{\leanurl{DefComputationalModel.lean}}}\label{sec:model}
 
 We write $\IN = \{1,2,\dots\}$ and $\IN_0 = \IN \cup \{0\}$.
 Further, $[n] = \{1,\dots, n\}$.
@@ -394,7 +392,7 @@ We first show a lower bound on the attainable dimensionality reduction in asympt
 The proof is a generalization of the impossibility of asymptotic consensus in non-rooted oblivious message adversaries \cite{CBFN15:icalp}.
 It does not rely on the dynamics of the communication network and requires a single static communication graph only, where a sufficiently large number of processes are isolated and remain on their initial values.
 
-\begin{theoremrep}[\leanproof{https://github.com/you/repo/Diamond.lean}]\label{lem:imposs}
+\begin{theoremrep}[\leanproof{\leanurl{ThmImposs.lean}}]\label{lem:imposs}
 For $d > s \geq 0$, the $d$-to-$s$-dimensional asymptotic subspace consensus problem is unsolvable in oblivious message adversaries that are not $(s+1)$-rooted.
 \end{theoremrep}
 \begin{proof}
@@ -459,7 +457,7 @@ For example, the equal neighbor algorithm is $1/n$-safe.
 We next define a property for averaging algorithms executed in $k$-broadcastable oblivious message adversaries for some $k \geq 1$.
 The property will be central in quantifying the influence a broadcasting set has on the other processes.
 
-\begin{definition}[Minimum broadcasting weight]
+\begin{definition}[Minimum broadcasting weight\leanformalized{\leanurl{DefMinimumBroadcastWeight.lean}}]
 Let round $t \geq 1$, graph $G_t$ be $k$-broadcastable for some $k \geq 1$, and $M(t)$ be the broadcasting set in $G_t$.
 For an averaging algorithm, an update step $x_i(t) = \sum_{j \in [n]} w_{ij}(t) x_j(t-1)$ has minimum broadcasting weight $\alpha$ if $\sum_{j \in M(t)} w_{ij}(t) \geq \alpha$.
 An averaging algorithm has minimum broadcasting weight $\alpha$ if all update steps do.
@@ -490,7 +488,7 @@ In the following Section~\ref{sec:distance_H} we establish a lower bound on the 
 The following is a formula for the distance of a point to a half-space.
 Its proof is given in the Appendix for completeness.
 
-\begin{lemmarep}[\leanproof{https://github.com/you/repo/Diamond.lean}]\label{lem:halfspace:distance:formula}
+\begin{lemmarep}[\leanproof{\leanurl{LemHalfspaceDistFormula.lean}}]\label{lem:halfspace:distance:formula}
 Let point $q\in \IR^d$ and normal vector $v\in \IR^d\setminus\{0\}$ define the half-space $H = \{ h\in\IR^d \mid \langle h - q , v \rangle < 0 \}$.
 Then
 $\dist(\{z\}, H) = \langle z - q , v\rangle / \lVert v\rVert$
@@ -548,7 +546,7 @@ In fact one can say more for executions in oblivious message adversaries that ar
 This is due to them being attracted by the values of the broadcasting set.
 The following lemma establishes a lower bound on this distance (Figure~\ref{fig:panel_2}a).
 
-\begin{lemmarep}\label{lem:halfspace:zone}
+\begin{lemmarep}[\leanproof{\leanurl{LemHalfspaceZone.lean}}]\label{lem:halfspace:zone}
 Consider an averaging algorithm executed in some $k$-broadcastable oblivious message adversary with minimum broadcasting weight $\alpha > 0$ and fix a round $t \geq 1$.
 Let $H \subseteq \IR^d$ be an open half-space such that $X(t-1) \cap H = \emptyset$.
 Then $\dist(X(t), H) \geq \alpha \dist(P_{M(t)}(t-1), H)$.
@@ -642,7 +640,7 @@ We will later use these to bound the radius function~$r$.
 \end{figure}
 
 
-\begin{lemmarep}[\leanproof{https://github.com/you/repo/Diamond.lean}]\label{lem:concave:line}
+\begin{lemmarep}[\leanproof{\leanurl{LemConcaveLine.lean}}]\label{lem:concave:line}
 Let $a,b,c \in \IR$ with $a<b<c$
 and let $r : [a,c]\to \IR$ be a concave function.
 Define $f:\IR \to \IR$ to be the unique affine function with $f(b) = r(b)$ and
@@ -700,7 +698,7 @@ which proves the second part of the lemma.
 
 We will actually only need a weaker linear bound (Figure~\ref{fig:panel_2}c) for our purposes:
 
-\begin{lemmarep}[\leanproof{https://github.com/you/repo/Diamond.lean}]\label{lem:concave:line:zero}
+\begin{lemmarep}[\leanproof{\leanurl{LemConcaveLineZero.lean}}]\label{lem:concave:line:zero}
 Let $a,b,c \in \IR$ with $a<b<c$
 and let $r : [a,c]\to \IR$ be a nonnegative concave function.
 Define $g:\IR \to \IR$ to be the unique affine function with $g(b) = r(b)$ and
@@ -736,7 +734,7 @@ This shows the claimed inequalities.
 This linear bound allows us to show that any $\alpha$-quantile of a symmetric
 body on the first axis (red in Figure~\ref{fig:panel_2}d) contains a non-negligible portion of the total volume.
 
-\begin{lemmarep}\label{lem:volumes}
+\begin{lemmarep}[\leanproof{\leanurl{LemVolumes.lean}}]\label{lem:volumes}
 Let $h\in\IR_+$, let $\alpha \in (0,1)$, and let $r:\IR \to \IR_+$ be a measurable function that is concave in $[0,h]$.
 Define $r_\mathrm{left}, r_\mathrm{right}:\IR\to \IR_+$ by
 \[
@@ -818,7 +816,7 @@ By construction, the cuts $P(t) \cap H_x$ and $\Sym(r) \cap H_x$, the latter of 
 Crucial in the proof is showing that the function $r$ is concave, so that Lemmas~\ref{lem:concave:line} and~\ref{lem:concave:line:zero} can be applied to lower bound the volume shaped off the symmetric body.
 
 
-\begin{lemma}\label{lem:contract}
+\begin{lemma}[\leanformalized{\leanurl{LemContract.lean}}]\label{lem:contract}
 If for round $t \geq 1$, broadcasting set~$M(t)$ fulfills $\lvert M(t)\rvert \leq d$,
 then
 \begin{equation}
@@ -960,7 +958,7 @@ and thus the lemma.
 Lemma~\ref{lem:contract} provides everything to establish contraction of the volume to zero.
 To allow us to conclude that this indeed implies a lower dimensionality, we use the following lemma, whose proof is given in the Appendix.
 
-\begin{lemmarep}\label{lem:convex:zero:hyperplane}
+\begin{lemmarep}[\leanproof{\leanurl{LemConvexZeroHyperplane.lean}}]\label{lem:convex:zero:hyperplane}
 Let $C \subseteq \mathbb{R}^d$ be a convex set.
 The following are equivalent:
 \begin{enumerate}
@@ -1029,7 +1027,7 @@ For example, by observing that the equal neighbor averaging algorithm is $1/n$-s
 Theorem~\ref{thm:poss} showed a contraction to lower dimensionality than the initial dimensionality~$d$.
 In this section we show that the dimensionality reduction indeed matches the lower bound in Section~\ref{sec:problem}:
 
-\begin{theorem}\label{thm:solving}
+\begin{theorem}[\leanproof{\leanurl{ThmSolving.lean}}]\label{thm:solving}
 Let $d \geq k \geq 1$.
 Every averaging algorithm with minimum broadcasting weight $\alpha > 0$ solves $d$-to-$(k-1)$-dimensional asymptotic subspace consensus in a $k$-broadcastable oblivious message adversary.
 \end{theorem}
@@ -1054,7 +1052,7 @@ We then show (Lemmas~\ref{lem:accumulation_point} and~\ref{lem:continuity}) that
 We start with the decomposition of node values into convex combinations of values from the broadcasting set
   and all node values.
 
-\begin{lemmarep}[\leanproof{https://github.com/you/repo/Diamond.lean}]\label{lem:xi_xip}
+\begin{lemmarep}[\leanproof{\leanurl{LemXiXip.lean}}]\label{lem:xi_xip}
 Assume an averaging algorithm with minimum broadcasting weight $\alpha > 0$.
 For any $i \in [n]$ and round $t \geq 1$, there exist points $\xi(t-1) \in P_{M(t)}(t-1)$  and $\xi'(t-1) \in P(t-1)$, such that
 $
@@ -1106,7 +1104,7 @@ For a sub-space $X$ of the inner product space $\IR^d$, we write $X^\bot$ for th
 
 Using the decomposition for two node values in Lemma~\ref{lem:xi_xip}, we can also decompose their difference as shown in the following lemma.
 
-\begin{lemma}[\leanproof{https://github.com/you/repo/Diamond.lean}]\label{lem:differences}
+\begin{lemma}[\leanproof{\leanurl{LemDifferences.lean}}]\label{lem:differences}
 Assume an algorithm with minimum broadcasting weight $\alpha > 0$.
 For any $i,j \in [n]$ and $t \geq 1$, if the broadcasting set fulfills $|M(t)| \geq 1$, there exists a vector $u_{\parallel}(t-1) \in \dir(X_{M(t)}(t-1))$, and a residual vector $u_\text{res}(t-1) \in \{x-y \mid x,y \in P(t-1)\}$, such that
 $
@@ -1118,7 +1116,7 @@ Follows from the fact that for $x,y \in X \subseteq \IR^d$, it is $x-y \in \dir(
   application of Lemma~\ref{lem:xi_xip} to both points in the difference $x_i(t)-x_j(t)$.
 \end{proof}
 
-\begin{definition}[Projection $\Pi_t$ and Thickness $\Delta$]\label{def:thickness}
+\begin{definition}[Projection $\Pi_t$ and Thickness $\Delta$\leanformalized{\leanurl{DefThickness.lean}}]\label{def:thickness}
 Consider an averaging algorithm with process values in $\IR^d$.
 For a round $t\ge 1$ with broadcasting set $M(t) \neq \emptyset$ let
 $
@@ -1136,7 +1134,7 @@ $.
 See also Figure~\ref{fig:panel_3} for a visualization.
 From the fact that $\Pi$ is an orthogonal projection, we have $\| \Pi( x - y ) \| \leq \| x - y \|$.
 
-\begin{lemma}\label{lem:accumulation_point}
+\begin{lemma}[\leanproof{\leanurl{LemAccumulationPoint.lean}}]\label{lem:accumulation_point}
 Assume an averaging algorithm executed in a $k$-broadcastable oblivious message adversary for some $k \geq 1$.
 Then the sequence $(\Pi_t)_{t \geq 1}$ has an accumulation point that is an orthogonal projection in $\IR^d$.
 \end{lemma}
@@ -1150,7 +1148,7 @@ Thus $\cal P$ is compact.
 From the compactness of $\cal P$, it follows that the sequence $(\Pi_t)_{t \geq 1}$, with each $\Pi_t \in {\cal P}$, has an accumulation point in ${\cal P}$.
 \end{proof}
 
-\begin{lemmarep}\label{lem:continuity}
+\begin{lemmarep}[\leanproof{\leanurl{LemContinuity.lean}}]\label{lem:continuity}
 For any finite non-empty set $X \subseteq \IR^d$ and with ${\cal P}$ being the set of orthogonal projections in $\IR^d$, the function $\Pi \mapsto \Delta_\Pi(X) : {\cal P} \to \IR$ is Lipschitz continuous.
 \end{lemmarep}
 \begin{proof}
@@ -1167,7 +1165,7 @@ and thus Lipschitz continuity.
 \end{proof}
 
 
-\begin{lemma}[Contraction of thickness]
+\begin{lemma}[Contraction of thickness\leanproof{\leanurl{LemDeltaContraction.lean}}]
 \label{lem:Delta-contraction}
 Let $k \geq 1$.
 Assume an averaging algorithm executed in a $k$-broadcastable oblivious message adversary with minimum broadcasting weight $\alpha>0$.

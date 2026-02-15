@@ -128,7 +128,8 @@ lemma outputs_eq_const_of_initial_const
 end AveragingExecution
 
 /-- Deterministic round-based algorithm over vector outputs. -/
-structure DeterministicAlgorithm (V : Type*) [NormedAddCommGroup V] [NormedSpace ℝ V] (n : Nat) where
+structure DeterministicAlgorithm
+    (V : Type*) [NormedAddCommGroup V] [NormedSpace ℝ V] (n : Nat) where
   step : Round → CommGraph n → (Proc n → V) → Proc n → V
   locality :
     ∀ t G x y i,
