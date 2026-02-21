@@ -1,0 +1,50 @@
+\documentclass[tikz,border=5pt]{standalone}
+\usepackage{tikz-3dplot}
+
+\begin{document}
+
+% Viewing angle
+\tdplotsetmaincoords{70}{120}
+
+\begin{tikzpicture}[tdplot_main_coords]
+
+% Cone parameters
+\def\h{3}   % height along x-axis
+\def\r{1}   % base radius
+\def\n{36}  % number of points to approximate circle
+
+% Tip of the cone
+\coordinate (O) at (0,0,0);
+
+% Draw cone base circle and surface
+\foreach \i in {0,...,\n} {
+    \pgfmathsetmacro{\angle}{360*\i/\n}
+    \pgfmathsetmacro{\x}{\h} % cone along x-axis
+    \pgfmathsetmacro{\y}{\r*cos(\angle)}
+    \pgfmathsetmacro{\z}{\r*sin(\angle)}
+    \coordinate (P\i) at (\x,\y,\z);
+
+    % Draw base circle (connect points)
+    \ifnum\i>0
+        \draw[thick] (P\i) -- (P\the\numexpr\i-1\relax);
+    \fi
+
+    % Draw cone surface (lines from tip)
+    \draw[blue!50,opacity=0.6] (O) -- (P\i);
+}
+
+% Close the base circle
+\draw[thick] (P0) -- (P\n);
+
+% Optional: shade cone surface
+\shade[blue!20,opacity=0.4]
+    (O)
+    \foreach \i in {0,...,\n} { -- (P\i) }
+    -- cycle;
+
+% Draw cone axis
+\draw[thick,red] (O) -- (\h,0,0);
+
+\end{tikzpicture}
+
+\end{document}
