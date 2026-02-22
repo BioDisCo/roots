@@ -471,7 +471,7 @@ def lighten(color: str, amount: float) -> tuple:
 
 
 
-def plot_execution(x: list[list[NDArray[np.float64]]], name: str, highlight_nodes: tuple[int, int] | None = None) -> None:
+def plot_execution(x: list[list[NDArray[np.float64]]], name: str, highlight_nodes: tuple[int, int] | None = None, html_name: str | None = None) -> None:
     """
     Plot the execution of the averaging algorithm as 3D trajectories.
 
@@ -639,7 +639,7 @@ def plot_execution(x: list[list[NDArray[np.float64]]], name: str, highlight_node
     print(f"Execution plot saved as PDF: {output_path_pdf}")
 
     # Create interactive HTML plot
-    plot_execution_interactive(x, name)
+    plot_execution_interactive(x, html_name if html_name is not None else name)
 
 
 def plot_execution_interactive(x: list[list[NDArray[np.float64]]], name: str) -> None:
@@ -1028,8 +1028,9 @@ def main():
         print(f"Simulation length: {len(graph_sequence)} rounds")
         root_label = "root" if k == 1 else "roots"
         exec_name = f"execution_{k}_{root_label}"
-        plot_execution(x, exec_name)
-        animate_execution(x, exec_name)
+        movie_name = f"Movie_S{k}_{exec_name}"
+        plot_execution(x, exec_name, html_name=f"Document_S{k}_{exec_name}")
+        animate_execution(x, movie_name)
 
     # Generate visualizations for custom sequence
     print("\nGenerating visualizations for custom sequence...")
@@ -1098,8 +1099,8 @@ def main():
     print(f"Simulation length: {len(graph_sequence)} rounds")
     # Get broadcasting nodes from the last graph in the sequence
     last_broadcaster_pair = tuple(sorted(broadcaster_pairs[-1]))
-    plot_execution(x_custom, "execution_simple", highlight_nodes=last_broadcaster_pair)
-    animate_execution(x_custom, "execution_oscillating_on_1d")
+    plot_execution(x_custom, "execution_simple", highlight_nodes=last_broadcaster_pair, html_name="Document_S4_execution_oscillating_on_1d")
+    animate_execution(x_custom, "Movie_S4_execution_oscillating_on_1d")
 
     # Plot execution prefixes up to round 10
     max_round = min(10, len(x_custom) - 1)

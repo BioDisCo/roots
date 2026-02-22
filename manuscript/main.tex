@@ -11,6 +11,7 @@
 \usepackage{graphicx}
 \usepackage{verified-badges}
 \newcommand{\leanurl}[1]{https://github.com/BioDisCo/roots/blob/master/lean/AsymptoticSubspace/#1}
+\newcommand{\suppurl}[1]{https://github.com/BioDisCo/roots/blob/master/manuscript/supplementary_material/#1}
 
 
 %
@@ -160,7 +161,7 @@
 
 \keywords{Averaging, dynamic networks, consensus, higher dimensional} %TODO mandatory; please add comma-separated list of keywords
 
-\supplement{}%optional, e.g. related research data, source code, ... hosted on a repository like zenodo, figshare, GitHub, ...
+\supplement{\url{https://github.com/BioDisCo/roots}}%optional, e.g. related research data, source code, ... hosted on a repository like zenodo, figshare, GitHub, ...
 %\supplementdetails[linktext={opt. text shown instead of the URL}, cite=DBLP:books/mk/GrayR93, subcategory={Description, Subcategory}, swhid={Software Heritage Identifier}]{General Classification (e.g. Software, Dataset, Model, ...)}{URL to related version} %linktext, cite, and subcategory are optional
 
 
@@ -253,11 +254,13 @@ Clicking a badge links to the corresponding Lean source code.
     \centering
     \includegraphics[width=\linewidth]{panel_1.pdf}
     \caption{\textbf{Averaging algorithm running in dynamic networks.} \textbf{a} Distributed system with $5$ nodes, executing an averaging algorithm in $\IR^3$. Nodes start with initial values in $\IR^3$ and average values received within the round's communication graph ($2$-rooted graphs shown). \textbf{b--d} Execution of the equal neighbor algorithm in $\IR^3$ for $10$ rounds. Initial values (blue) and round-10 values (black) shown. \textbf{b} In a $1$-rooted oblivious message adversary, convergence onto a single point (black).  \textbf{c} In a $2$-rooted oblivious message adversary, convergence onto a line (black) \textbf{d} In a $3$-rooted oblivious message adversary, convergence onto a plane (black).
+    Animated (\href{\suppurl{Movie_S1_execution_1_root_animation.mp4}}{Movie~S1}, \href{\suppurl{Movie_S2_execution_2_roots_animation.mp4}}{S2}, \href{\suppurl{Movie_S3_execution_3_roots_animation.mp4}}{S3}) and interactive (\href{\suppurl{Document_S1_execution_1_root_execution.html}}{Document~S1}, \href{\suppurl{Document_S2_execution_2_roots_execution.html}}{S2}, \href{\suppurl{Document_S3_execution_3_roots_execution.html}}{S3}) versions of \textbf{b--d} are provided as supplementary material.
     \textbf{e} Simulation of averaging algorithm within an oblivious message adversary with $2$-broadcastable communication graphs
       (broadcasting set marked in red).
     Initial values ($t=0$) and outputs until $t=4$ are shown (black).
     The linear subspace spanned by the processes in the current round's broadcasting set is shown (dashed red).
     Its polar coordinates ($\varphi$ and $\theta$) are seen to converge.
+    An animated execution oscillating on a $1$-dimensional subspace is provided as \href{\suppurl{Movie_S4_execution_oscillating_on_1d_animation.mp4}}{Movie~S4} and \href{\suppurl{Document_S4_execution_oscillating_on_1d_execution.html}}{Document~S4}.
     }
     \label{fig:panel_1}
 \end{figure}

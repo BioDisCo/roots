@@ -1,4 +1,7 @@
 TARGETS=main.pdf
+BADGE_SVGS=$(wildcard badges/*.svg)
+BADGE_PDFS=$(BADGE_SVGS:.svg=.pdf)
+
 # You want latexmk to *always* run, because make does not have all the info.
 # Also, include non-file targets in .PHONY so they are run regardless of any
 # file of the given name existing.
@@ -13,12 +16,16 @@ TARGETS=main.pdf
 
 # -interaction=nonstopmode keeps the pdflatex backend from stopping at a
 # missing file reference and interactively asking you for an alternative.
-all: $(TARGETS)
+all: $(BADGE_PDFS) $(TARGETS)
 
-$(TARGETS):
+badges/%.pdf: badges/%.svg
+	inkscape $< --export-type=pdf --export-filename=$@
+
+$(TARGETS): $(BADGE_PDFS)
 	latexmk -pdf -pdflatex="pdflatex -interaction=nonstopmode" -use-make $(@:.pdf=.tex)
 
 
 clean:
 	latexmk -CA
 	rm -f *.bbl *.aux *.axp *.vtc
+	rm -f $(BADGE_PDFS)
