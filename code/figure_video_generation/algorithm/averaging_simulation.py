@@ -1094,7 +1094,7 @@ def main():
     # Get broadcasting nodes from the last graph in the sequence
     last_broadcaster_pair = tuple(sorted(broadcaster_pairs[-1]))
     plot_execution(x_custom, "execution_simple", highlight_nodes=last_broadcaster_pair)
-    animate_execution(x_custom, "execution_simple")
+    animate_execution(x_custom, "execution_oscillating_on_1d")
 
     # Plot execution prefixes up to round 10
     max_round = min(10, len(x_custom) - 1)

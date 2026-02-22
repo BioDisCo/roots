@@ -1,2 +1,5 @@
+all:
+	python averaging_simulation.py
+
 clean:
-	rm results/*.pdf
+	rm -f results/*
