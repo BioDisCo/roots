@@ -8,8 +8,8 @@ a directed communication graph and sets its new value to the average of
 the received values.
 """
 
-import os
 from collections import defaultdict
+from pathlib import Path
 
 import matplotlib
 import matplotlib.colors as mcolors
@@ -247,8 +247,8 @@ def plot_graph(graph: Graph, name: str = "graph", broadcasters: set[int] | None 
     """
     global _node_positions_cache
 
-    # Create results directory if it doesn't exist
-    os.makedirs("results", exist_ok=True)
+    results_dir = Path("results")
+    results_dir.mkdir(exist_ok=True)
 
     # Create a networkx graph for visualization
     nx_graph = nx.DiGraph()
@@ -290,8 +290,8 @@ def plot_graph(graph: Graph, name: str = "graph", broadcasters: set[int] | None 
     plt.ylim(min(ys) - pad, max(ys) + pad)
 
     plt.axis("off")
-    output_path_pdf = os.path.join("results", f"{name}.pdf")
-    output_path_svg = os.path.join("results", f"{name}.svg")
+    output_path_pdf = results_dir / f"{name}.pdf"
+    output_path_svg = results_dir / f"{name}.svg"
     plt.savefig(output_path_pdf, format="pdf")
     plt.savefig(output_path_svg, format="svg")
     plt.close()
@@ -486,8 +486,8 @@ def plot_execution(x: list[list[NDArray[np.float64]]], name: str, highlight_node
     Returns:
         None
     """
-    # Create results directory if it doesn't exist
-    os.makedirs("results", exist_ok=True)
+    results_dir = Path("results")
+    results_dir.mkdir(exist_ok=True)
 
     fig = plt.figure(figsize=(3, 3))
     ax = fig.add_subplot(111, projection='3d')
@@ -630,8 +630,8 @@ def plot_execution(x: list[list[NDArray[np.float64]]], name: str, highlight_node
     # Add padding to avoid cutting off labels
     plt.subplots_adjust(left=0.1, right=0.85, top=1.1, bottom=0)
 
-    output_path_pdf = os.path.join("results", f"{name}_execution.pdf")
-    output_path_svg = os.path.join("results", f"{name}_execution.svg")
+    output_path_pdf = results_dir / f"{name}_execution.pdf"
+    output_path_svg = results_dir / f"{name}_execution.svg"
     plt.savefig(output_path_pdf, format="pdf")
     plt.savefig(output_path_svg, format="svg")
     plt.close()
@@ -650,7 +650,8 @@ def plot_execution_interactive(x: list[list[NDArray[np.float64]]], name: str) ->
         x: Output from run_averaging_algorithm
         name: Base name for the output file
     """
-    os.makedirs("results", exist_ok=True)
+    html_dir = Path("results") / "html"
+    html_dir.mkdir(parents=True, exist_ok=True)
 
     fig = go.Figure()
 
@@ -748,8 +749,8 @@ def plot_execution_interactive(x: list[list[NDArray[np.float64]]], name: str) ->
         height=900
     )
 
-    output_path = os.path.join("results", f"{name}_execution.html")
-    fig.write_html(output_path)
+    output_path = html_dir / f"{name}_execution.html"
+    fig.write_html(str(output_path))
     print(f"Interactive HTML plot saved: {output_path}")
 
 
@@ -896,10 +897,11 @@ def plot_broadcaster_angles(vectors_over_time: list[list[NDArray[np.float64]]]) 
 
     plt.tight_layout()
 
-    os.makedirs("results", exist_ok=True)
-    output_path = os.path.join("results", "broadcaster_angles.pdf")
+    results_dir = Path("results")
+    results_dir.mkdir(exist_ok=True)
+    output_path = results_dir / "broadcaster_angles.pdf"
     plt.savefig(output_path, format="pdf", bbox_inches='tight', dpi=150)
-    plt.savefig(output_path.replace('.pdf', '.svg'), format="svg", bbox_inches='tight')
+    plt.savefig(output_path.with_suffix('.svg'), format="svg", bbox_inches='tight')
     plt.close()
 
     print(f"Angles plot saved: {output_path}")
@@ -948,11 +950,12 @@ def animate_execution(x: list[list[NDArray[np.float64]]], name: str = "execution
 
     anim = FuncAnimation(fig, update, frames=T, interval=1000, repeat=True)
 
-    os.makedirs("results", exist_ok=True)
-    output_path = os.path.join("results", f"{name}_animation.mp4")
+    movies_dir = Path("results") / "movies"
+    movies_dir.mkdir(parents=True, exist_ok=True)
+    output_path = movies_dir / f"{name}_animation.mp4"
 
     writer = FFMpegWriter(fps=5, metadata=dict(artist=''), bitrate=1800)
-    anim.save(output_path, writer=writer)
+    anim.save(str(output_path), writer=writer)
     plt.close()
 
     print(f"Execution animation saved: {output_path}")
@@ -1023,8 +1026,10 @@ def main():
         
         x = run_averaging_algorithm(graph_sequence, x0, T)
         print(f"Simulation length: {len(graph_sequence)} rounds")
-        plot_execution(x, f"k_forest_k{k}")
-        animate_execution(x, f"k_forest_k{k}")
+        root_label = "root" if k == 1 else "roots"
+        exec_name = f"execution_{k}_{root_label}"
+        plot_execution(x, exec_name)
+        animate_execution(x, exec_name)
 
     # Generate visualizations for custom sequence
     print("\nGenerating visualizations for custom sequence...")
