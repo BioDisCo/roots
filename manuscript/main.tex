@@ -1,5 +1,5 @@
-%\documentclass[a4paper,anonymous,USenglish]{lipics-v2021}
-\documentclass[a4paper,USenglish]{lipics-v2021}
+\documentclass[a4paper,anonymous,USenglish]{lipics-v2021}
+%\documentclass[a4paper,USenglish]{lipics-v2021}
 \usepackage{amsmath,amsthm,amssymb}
 \usepackage{microtype}
 \usepackage{apxproof}
@@ -10,8 +10,8 @@
 % Lean badges (verified-badges package)
 \usepackage{graphicx}
 \usepackage{verified-badges}
-\newcommand{\leanurl}[1]{https://github.com/BioDisCo/roots/blob/master/lean/AsymptoticSubspace/#1}
-\newcommand{\suppurl}[1]{https://github.com/BioDisCo/roots/blob/master/manuscript/supplementary_material/#1}
+\newcommand{\leanurl}[1]{https://github.com/anonymous-sand26/subspace-consensus/blob/main/lean/AsymptoticSubspace/#1}
+\newcommand{\suppurl}[1]{https://github.com/anonymous-sand26/subspace-consensus/blob/main/supplementary_material/#1}
 \usepackage{xcolor}
 \definecolor{suppcolor}{HTML}{1A6496}
 \newcommand{\suppref}[2]{\href{\suppurl{#1}}{\textcolor{suppcolor}{\textbf{#2}}}}
@@ -248,7 +248,8 @@ Again, we show that this holds in the general case.
 We conclude in Section~\ref{sec:conclusion}.
 
 Some definitions and results have been formalized in the Lean~4 proof assistant~\cite{lean4} using the Mathlib library.
-Results marked with \leanproof{} have machine-checked proofs; definitions and statements marked with \leanformalized{} have been formalized without a complete proof (see \url{https://github.com/BioDisCo/verified-badges}).
+Results marked with \leanproof{} have machine-checked proofs; definitions and statements marked with \leanformalized{} have been formalized without a complete proof.
+%(see \url{https://github.com/BioDisCo/verified-badges}).
 The Lean formalizations and proofs were generated with the assistance of Claude Opus~4.6 and GPT-5.3-Codex.
 These formalizations serve as supplementary information and are not meant as replacements for the natural-language proofs in this paper.
 Clicking a badge links to the corresponding Lean source code.
