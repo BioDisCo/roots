@@ -1,13 +1,9 @@
 \documentclass[a4paper,USenglish]{lipics-v2021}
-%\documentclass[a4paper,USenglish]{lipics-v2021}
 \usepackage{amsmath,amsthm,amssymb}
 \usepackage{microtype}
 \usepackage[appendix=strip]{apxproof}
 \usepackage{hyperref}
-%\usepackage{thmtools}
-% \usepackage{thm-restate}
 
-% Lean badges (verified-badges package)
 \usepackage{graphicx}
 \usepackage{verified-badges}
 \newcommand{\leanurl}[1]{https://github.com/BioDisCo/roots/blob/main/lean/AsymptoticSubspace/#1}
@@ -17,7 +13,6 @@
 \newcommand{\suppref}[2]{\href{\suppurl{#1}}{\textcolor{suppcolor}{\textbf{#2}}}}
 
 
-%
 \usepackage{tikz}
 \usetikzlibrary{shapes.symbols,arrows}
 \usetikzlibrary{matrix,calc,intersections,patterns}
@@ -30,7 +25,6 @@
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 
-%\usepackage{todonotes}
 
 
 \renewcommand{\algorithmicrequire}{\textbf{Initialization:}}
@@ -78,17 +72,16 @@
 \newcommand{\A}{\mathcal{A}}
 \newcommand{\E}{\mathcal{E}}
 
-\newcommand{\Bcnc}{A^{\Delta}_{\mathrm {c}}}                %
-\newcommand{\Bunu}{\tilde{B}}            %
-\newcommand{\Bms}{\tilde{B}}            %
-\newcommand{\Bep}{A^{\Delta}_\mathrm{e}}                %
-\newcommand{\Benp}{A^{\Delta}_\mathrm{e}}                %
-\newcommand{\Bneone}{A^{\Delta}_\mathrm{r}}                %
-\newcommand{\Bnetwo}{A^{\Delta}_\mathrm{r}^\mathrm{HA}}        %
+\newcommand{\Bcnc}{A^{\Delta}_{\mathrm {c}}}
+\newcommand{\Bunu}{\tilde{B}}
+\newcommand{\Bms}{\tilde{B}}
+\newcommand{\Bep}{A^{\Delta}_\mathrm{e}}
+\newcommand{\Benp}{A^{\Delta}_\mathrm{e}}
+\newcommand{\Bneone}{A^{\Delta}_\mathrm{r}}
+\newcommand{\Bnetwo}{A^{\Delta}_\mathrm{r}^\mathrm{HA}}
 \newcommand{\xb}{\overline{x}}    
 \newcommand{\SCC}{\mathcal{C}}
 \newcommand{\CP}{\mathcal{P}_\ccirclearrowleft}
-%
 \newcommand{\IRmax}{\overline{\IR}}
 \newcommand{\IRmin}{{\IR}_{\min}}
 \newcommand{\wstar}{{w}_{*}}
@@ -117,57 +110,44 @@
 \DeclareMathOperator\Rcv{Rcv}
 \DeclareMathOperator\poly{poly}
 
-%\newtheorem{theorem}{Theorem}
-%\newtheorem{lemma}[thm]{Lemma}
-%\newtheorem{corollary}[thm]{Corollary}
-%\theoremstyle{definition}
-%\newtheorem{defn}[thm]{Definition}
 
 
-\renewcommand{\topfraction}{1.0}	% max fraction of floats at top
-\renewcommand{\bottomfraction}{1.0}	% max fraction of floats at bottom
-% \setcounter{topnumber}{2}
-% \setcounter{bottomnumber}{2}
-% \setcounter{totalnumber}{4}     % 2 may work better
-% \setcounter{dbltopnumber}{2}    % for 2-column pages
-\renewcommand{\dbltopfraction}{0.9}	% fit big float above 2-col. text
-\renewcommand{\textfraction}{0.07}	% allow minimal text w. figs
-%   Parameters for FLOAT pages (not text pages):
-\renewcommand{\floatpagefraction}{0.9}	% require fuller float pages
-% N.B.: floatpagefraction MUST be less than topfraction !!
-\renewcommand{\dblfloatpagefraction}{0.9}	% require fuller float pages
+\renewcommand{\topfraction}{1.0}
+\renewcommand{\bottomfraction}{1.0}
+\renewcommand{\dbltopfraction}{0.9}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.9}
+\renewcommand{\dblfloatpagefraction}{0.9}
 
 
 
 \title{Asymptotic Subspace Consensus in Dynamic Networks}
 
-\author{Matthias {Függer}}{Université Paris-Saclay, CNRS, ENS Paris-Saclay, LMF, Gif-sur-Yvette, France \and \url{https://home.lmf.cnrs.fr/MatthiasFuegger/} }{mfuegger@lmf.cnrs.fr}{https://orcid.org/0000-0001-5765-0301}{}%TODO mandatory, please use full name; only 1 author per \author macro; first two parameters are mandatory, other parameters can be empty. Please provide at least the name of the affiliation and the country. The full address is optional. Use additional curly braces to indicate the correct name splitting when the last name consists of multiple name parts.
+\author{Matthias {Függer}}{Université Paris-Saclay, CNRS, ENS Paris-Saclay, LMF, Gif-sur-Yvette, France \and \url{https://home.lmf.cnrs.fr/MatthiasFuegger/} }{mfuegger@lmf.cnrs.fr}{https://orcid.org/0000-0001-5765-0301}{}
 
 \author{Thomas {Nowak}}{Université Paris-Saclay, CNRS, ENS Paris-Saclay, LMF, Gif-sur-Yvette, France \and Institut Universitaire de France, Paris, France \and \url{https://www.thomasnowak.net}}{thomas@thomasnowak.net}{https://orcid.org/0000-0003-1690-9342}{}
 
-\authorrunning{M. Függer and T. Nowak} %TODO mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et al.'
+\authorrunning{M. Függer and T. Nowak}
 
 
 \funding{The work was supported by the French National Research Agency
-(ANR) projects DREAMY (ANR-21-CE48-0003) and COSTXPRESS (ANR-23-CE45-0013), as well as the SAIF project, funded by the ``France 2030'' government investment plan managed by ANR, under the reference ANR-23-PEIA-0006.}%optional, to capture a funding statement, which applies to all authors. Please enter author specific funding statements as fifth argument of the \author macro.
+(ANR) projects DREAMY (ANR-21-CE48-0003) and COSTXPRESS (ANR-23-CE45-0013), as well as the SAIF project, funded by the ``France 2030'' government investment plan managed by ANR, under the reference ANR-23-PEIA-0006.}
 
-\acknowledgements{We thank Emmanuel Godard and Eloi Perdereau for introducing us to the question of possible generalizations of the asymptotic consensus problem.}%optional
+\acknowledgements{We thank Emmanuel Godard and Eloi Perdereau for introducing us to the question of possible generalizations of the asymptotic consensus problem.}
 
-\nolinenumbers %uncomment to disable line numbering
-\hideLIPIcs % to not show lipics logo / doi etc
+\nolinenumbers
+\hideLIPIcs
 
-\Copyright{Matthias Függer and Thomas Nowak} %TODO mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
+\Copyright{Matthias Függer and Thomas Nowak}
 
 
 \ccsdesc[500]{Theory of computation~Distributed computing models}
- %TODO mandatory: Please choose ACM 2012 classifications from https://dl.acm.org/ccs/ccs_flat.cfm 
 
-\keywords{Averaging, dynamic networks, consensus, higher dimensional} %TODO mandatory; please add comma-separated list of keywords
+\keywords{Averaging, dynamic networks, consensus, higher dimensional}
 
-\relatedversiondetails{Full version}{https://arxiv.org/abs/2602.19121}%optional, e.g. related papers in other conferences, pre-print server, or journal
+\relatedversiondetails{Full version}{https://arxiv.org/abs/2602.19121}
 
-\supplement{\url{https://github.com/BioDisCo/roots}}%optional, e.g. related research data, source code, ... hosted on a repository like zenodo, figshare, GitHub, ...
-%\supplementdetails[linktext={opt. text shown instead of the URL}, cite=DBLP:books/mk/GrayR93, subcategory={Description, Subcategory}, swhid={Software Heritage Identifier}]{General Classification (e.g. Software, Dataset, Model, ...)}{URL to related version} %linktext, cite, and subcategory are optional
+\supplement{\url{https://github.com/BioDisCo/roots}}
 
 \EventEditors{George B. Mertzios and Andr\'{e}a W. Richa}
 \EventNoEds{2}
@@ -249,7 +229,6 @@ In Section~\ref{sec:analysis} we prove our two main results:
 In Section~\ref{sec:converge_zero_vol}, a rate at which certain averaging algorithms contract to a space that is of lower dimension than the space of the initial values.
 The proof is by showing that the volume that contains the process outputs converges to~0.
 Inspired by the symmetrization of Charron-Bost, Függer, and Nowak~\cite{CBFN16:centroid}, we use a Steiner-type symmetrization of the convex hull of the process outputs.
-% In contrast to \cite{CBFN16:centroid} that used $(d-1)$-dimensional boxes, we symmetrize cuts along the first axis to $(d-1)$-dimensional balls.
 Most importantly, this symmetrization preserves volumes of cuts along the first axis and guarantees concavity of the ball-radius function along the first axis.
 We then establish a lower bound on the volume contraction between successive rounds.
 
@@ -262,7 +241,6 @@ We conclude in Section~\ref{sec:conclusion}.
 
 Some definitions and results have been formalized in the Lean~4 proof assistant~\cite{lean4} using the Mathlib library.
 Results marked with \leanproof{} have machine-checked proofs; definitions and statements marked with \leanformalized{} have been formalized without a complete proof.
-%(see \url{https://github.com/BioDisCo/verified-badges}).
 The Lean formalizations and proofs were generated with the assistance of Claude Opus~4.6 and GPT-5.3-Codex.
 These formalizations serve as supplementary information and are not meant as replacements for the natural-language proofs in this paper.
 Clicking a badge links to the corresponding Lean source code.
@@ -356,19 +334,15 @@ The resulting bound of $O(n \log\log n)$ rounds from 1-rooted to 1-broadcastable
 For the more general $k$-broadcastable graphs, one can show that from $k$-rooted communication graphs, one also obtains $k$-broadcastable graphs in a bounded number of rounds.
 A short argument for a polynomial bound is as follows:
 
-%\begin{proof}
 Let $t \geq n^{k+1}$ and let $G_1,\dots,G_t$ be $k$-rooted.
 By the pigeonhole principle, there exists a subsequence $G_1',\dots,G_s'$ of at least
 $s \geq n^{k+1}/\binom{n}{k}\geq n^{k+1}/n^k = n$ communication graphs in which~$M$ is a root set.
 By considering the influence sets
-%\begin{align*}
 $S_i(r) = \big\{ j\in[n] \mid (i,j) \in E(G_1'\circ \cdots \circ G_r') \big\}$ for every $i\in M$ and
 $S(r) = \bigcup_{i \in M} S_i(r)$,
-%\end{align*}
 one observes that $S(r)$ strictly grows until it covers the set~$[n]$ of all processes.
 Thus, since $\lvert S(0)\rvert \leq k$ and $s \geq n$, influence set $S(s)$ covers~$[n]$.
 In particular this means that~$M$ is a broadcasting set in the product graph $G = G_1\circ\cdots\circ G_t$.
-%\end{proof}
 
 A more involved analysis by El-Hayek, Henzinger, and Schmid~\cite{el2023asymptotically} shows that indeed a bound linear in $n$, and independent of $k$, holds.
 
@@ -1351,7 +1325,7 @@ We also hypothesize that variants of the mid-point algorithm that have been show
 In particular we conjecture that analogous to asymptotic consensus in rooted adversaries, the dependency on the dimension~$d$ can be removed.
 
 
-\bibliographystyle{plainurl}% the recommended bibstyle
+\bibliographystyle{plainurl}
 \bibliography{agents}
 
 
