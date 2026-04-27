@@ -1,11 +1,9 @@
-\documentclass[a4paper,anonymous,USenglish]{lipics-v2021}
-%\documentclass[a4paper,USenglish]{lipics-v2021}
+%\documentclass[a4paper,anonymous,USenglish]{lipics-v2021}
+\documentclass[a4paper,USenglish]{lipics-v2021}
 \usepackage{amsmath,amsthm,amssymb}
 \usepackage{microtype}
 \usepackage{apxproof}
 \usepackage{hyperref}
-%\usepackage{thmtools}
-% \usepackage{thm-restate}
 
 % Lean badges (verified-badges package)
 \usepackage{graphicx}
@@ -30,7 +28,6 @@
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 
-%\usepackage{todonotes}
 
 
 \renewcommand{\algorithmicrequire}{\textbf{Initialization:}}
@@ -117,19 +114,10 @@
 \DeclareMathOperator\Rcv{Rcv}
 \DeclareMathOperator\poly{poly}
 
-%\newtheorem{theorem}{Theorem}
-%\newtheorem{lemma}[thm]{Lemma}
-%\newtheorem{corollary}[thm]{Corollary}
-%\theoremstyle{definition}
-%\newtheorem{defn}[thm]{Definition}
-
 
 \renewcommand{\topfraction}{1.0}	% max fraction of floats at top
 \renewcommand{\bottomfraction}{1.0}	% max fraction of floats at bottom
-% \setcounter{topnumber}{2}
-% \setcounter{bottomnumber}{2}
-% \setcounter{totalnumber}{4}     % 2 may work better
-% \setcounter{dbltopnumber}{2}    % for 2-column pages
+
 \renewcommand{\dbltopfraction}{0.9}	% fit big float above 2-col. text
 \renewcommand{\textfraction}{0.07}	% allow minimal text w. figs
 %   Parameters for FLOAT pages (not text pages):
@@ -236,7 +224,6 @@ In Section~\ref{sec:analysis} we prove our two main results:
 In Section~\ref{sec:converge_zero_vol}, a rate at which certain averaging algorithms contract to a space that is of lower dimension than the space of the initial values.
 The proof is by showing that the volume that contains the process outputs converges to~0.
 Inspired by the symmetrization of Charron-Bost, Függer, and Nowak~\cite{CBFN16:centroid}, we use a Steiner-type symmetrization of the convex hull of the process outputs.
-% In contrast to \cite{CBFN16:centroid} that used $(d-1)$-dimensional boxes, we symmetrize cuts along the first axis to $(d-1)$-dimensional balls.
 Most importantly, this symmetrization preserves volumes of cuts along the first axis and guarantees concavity of the ball-radius function along the first axis.
 We then establish a lower bound on the volume contraction between successive rounds.
 
@@ -249,7 +236,6 @@ We conclude in Section~\ref{sec:conclusion}.
 
 Some definitions and results have been formalized in the Lean~4 proof assistant~\cite{lean4} using the Mathlib library.
 Results marked with \leanproof{} have machine-checked proofs; definitions and statements marked with \leanformalized{} have been formalized without a complete proof.
-%(see \url{https://github.com/BioDisCo/verified-badges}).
 The Lean formalizations and proofs were generated with the assistance of Claude Opus~4.6 and GPT-5.3-Codex.
 These formalizations serve as supplementary information and are not meant as replacements for the natural-language proofs in this paper.
 Clicking a badge links to the corresponding Lean source code.
