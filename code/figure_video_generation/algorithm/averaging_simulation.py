@@ -12,7 +12,6 @@ from collections import defaultdict
 from pathlib import Path
 
 import matplotlib
-import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
@@ -136,24 +135,9 @@ def plane_cube_intersection(centroid: NDArray[np.float64], normal: NDArray[np.fl
     Returns:
         List of intersection points ordered to form a polygon
     """
-    points = []
     d = np.dot(normal, centroid)
 
-    # Check intersection with 6 cube faces
-    # Face x=0
-    if abs(normal[0]) > 1e-10:
-        t = (d - normal[1]*0 - normal[2]*0) / normal[0]
-        # But we're looking for plane at x=0
-        t = d / normal[0]
-        y_range = np.linspace(0, 1, 100)
-        z_range = np.linspace(0, 1, 100)
-        for y in [0, 1]:
-            for z in [0, 1]:
-                # Check if this point is on the plane
-                if abs(normal[0]*0 + normal[1]*y + normal[2]*z - d) < 0.1:
-                    points.append(np.array([0, y, z]))
-
-    # More systematic approach: check all edges and vertices of the cube
+    # Check all edges of the cube for intersections with the plane
     vertices = []
     for x in [0, 1]:
         for y in [0, 1]:
@@ -176,23 +160,6 @@ def plane_cube_intersection(centroid: NDArray[np.float64], normal: NDArray[np.fl
         if val1 * val2 < 0:  # Sign change = intersection
             t = val1 / (val1 - val2)
             intersection_points.append(p1 + t * (p2 - p1))
-
-    # Also check face intersections
-    # For each face, find intersection polygon
-    faces = [
-        # x = 0
-        (np.array([0, 0, 0]), np.array([0, 1, 0]), np.array([0, 1, 1]), np.array([0, 0, 1])),
-        # x = 1
-        (np.array([1, 0, 0]), np.array([1, 1, 0]), np.array([1, 1, 1]), np.array([1, 0, 1])),
-        # y = 0
-        (np.array([0, 0, 0]), np.array([1, 0, 0]), np.array([1, 0, 1]), np.array([0, 0, 1])),
-        # y = 1
-        (np.array([0, 1, 0]), np.array([1, 1, 0]), np.array([1, 1, 1]), np.array([0, 1, 1])),
-        # z = 0
-        (np.array([0, 0, 0]), np.array([1, 0, 0]), np.array([1, 1, 0]), np.array([0, 1, 0])),
-        # z = 1
-        (np.array([0, 0, 1]), np.array([1, 0, 1]), np.array([1, 1, 1]), np.array([0, 1, 1])),
-    ]
 
     # Remove duplicates and sort by angle from centroid
     if intersection_points:
@@ -455,22 +422,6 @@ def calculate_line_fit_r2(points: NDArray[np.float64], centroid: NDArray[np.floa
     return r_squared
 
 
-def lighten(color: str, amount: float) -> tuple:
-    """
-    Lighten a color by blending it with white.
-
-    Args:
-        color: Color name or hex code
-        amount: Lightening amount from 0 (original) to 1 (white)
-
-    Returns:
-        RGB tuple
-    """
-    rgb = mcolors.to_rgb(color)
-    return rgb
-
-
-
 def plot_execution(x: list[list[NDArray[np.float64]]], name: str, highlight_nodes: tuple[int, int] | None = None, html_name: str | None = None) -> None:
     """
     Plot the execution of the averaging algorithm as 3D trajectories.
@@ -492,8 +443,7 @@ def plot_execution(x: list[list[NDArray[np.float64]]], name: str, highlight_node
     fig = plt.figure(figsize=(3, 3))
     ax = fig.add_subplot(111, projection='3d')
 
-    base_color = 'steelblue'
-    lightened_color = lighten(base_color, 0.5)
+    node_color = 'steelblue'
 
     num_nodes = len(x[0])
 
@@ -502,9 +452,9 @@ def plot_execution(x: list[list[NDArray[np.float64]]], name: str, highlight_node
         # Extract coordinates for this node over all time steps
         trajectory = np.array([x[t][node] for t in range(len(x))])
 
-        # Connect points with lines to show trajectory using same lightened color
+        # Connect points with lines to show trajectory
         ax.plot(trajectory[:, 0], trajectory[:, 1], trajectory[:, 2],
-               color=lightened_color, linewidth=1, alpha=0.5)
+               color=node_color, linewidth=1, alpha=0.5)
 
         # Add arrow on first edge where node actually moves with fixed length
         if len(trajectory) > 1:
@@ -519,13 +469,13 @@ def plot_execution(x: list[list[NDArray[np.float64]]], name: str, highlight_node
                     arrow_length = 0.2  # Fixed absolute arrow length
                     ax.quiver(p1[0], p1[1], p1[2],
                              arrow_length * direction_norm[0], arrow_length * direction_norm[1], arrow_length * direction_norm[2],
-                             color=lightened_color, arrow_length_ratio=0.3,
+                             color=node_color, arrow_length_ratio=0.3,
                              alpha=1.0)
                     break  # Only draw one arrow
 
         # Plot initial point with color and larger size
         ax.scatter(trajectory[0, 0], trajectory[0, 1], trajectory[0, 2],
-                  s=80, color=lightened_color, alpha=1.0)
+                  s=80, color=node_color, alpha=1.0)
 
         # Plot final point with black color and larger size
         ax.scatter(trajectory[-1, 0], trajectory[-1, 1], trajectory[-1, 2],
